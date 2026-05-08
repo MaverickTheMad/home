@@ -19,7 +19,6 @@
       --text-secondary: #5f5e5a;
       --text-muted: #9a9890;
       --radius-lg: 14px;
-
       --ren: #7a3f3f;
       --mav: #3b5c3b;
     }
@@ -33,7 +32,6 @@
         --text-primary: #f1efea;
         --text-secondary: #b4b2a9;
         --text-muted: #6b6a66;
-
         --ren: #c49090;
         --mav: #85b085;
       }
@@ -47,6 +45,11 @@
       .badge-live    { background: #04342C !important; color: #5DCAA5 !important; }
       .badge-soon    { background: #2c2c2a !important; color: #6b6a66 !important; }
       .badge-link    { background: #26215C !important; color: #AFA9EC !important; }
+      .pin-dot       { background: rgba(255,255,255,0.15) !important; }
+      .pin-dot.filled { background: var(--text-primary) !important; }
+      .pin-btn       { background: #2e2e2c !important; color: var(--text-primary) !important; }
+      .pin-btn:hover { background: #3a3a38 !important; }
+      .pin-btn.del   { background: transparent !important; }
     }
 
     body {
@@ -54,17 +57,126 @@
       background: var(--bg);
       color: var(--text-primary);
       min-height: 100vh;
+    }
+
+    /* ── PIN SCREEN ── */
+    #pin-screen {
+      min-height: 100vh;
       display: flex;
       flex-direction: column;
       align-items: center;
       justify-content: center;
+      padding: 2rem 1.5rem;
+    }
+
+    #pin-screen h1 {
+      font-family: 'DM Serif Display', serif;
+      font-size: clamp(1.8rem, 5vw, 2.3rem);
+      font-weight: 400;
+      letter-spacing: -0.02em;
+      margin-bottom: 6px;
+    }
+
+    .name-ren  { color: var(--ren); font-style: italic; }
+    .name-mav  { color: var(--mav); }
+    .ampersand { color: var(--text-muted); font-style: italic; margin: 0 0.08em; }
+
+    #pin-screen p {
+      font-size: 12px;
+      color: var(--text-muted);
+      letter-spacing: 0.07em;
+      text-transform: uppercase;
+      font-weight: 300;
+      margin-bottom: 2.5rem;
+    }
+
+    .pin-dots {
+      display: flex;
+      gap: 14px;
+      margin-bottom: 2rem;
+    }
+
+    .pin-dot {
+      width: 13px;
+      height: 13px;
+      border-radius: 50%;
+      background: rgba(0,0,0,0.12);
+      transition: background 0.15s ease, transform 0.1s ease;
+    }
+
+    .pin-dot.filled {
+      background: var(--text-primary);
+      transform: scale(1.15);
+    }
+
+    .pin-dot.error {
+      background: #c0392b !important;
+    }
+
+    .pin-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 10px;
+      width: 220px;
+    }
+
+    .pin-btn {
+      background: var(--surface);
+      border: 0.5px solid var(--border);
+      border-radius: var(--radius-lg);
+      font-family: 'DM Sans', sans-serif;
+      font-size: 20px;
+      font-weight: 400;
+      color: var(--text-primary);
+      width: 100%;
+      aspect-ratio: 1;
+      cursor: pointer;
+      transition: background 0.1s ease, transform 0.08s ease;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      user-select: none;
+    }
+
+    .pin-btn:hover  { background: var(--surface); border-color: var(--border-hover); }
+    .pin-btn:active { transform: scale(0.93); }
+
+    .pin-btn.zero { grid-column: 2; }
+
+    .pin-btn.del {
+      background: transparent;
+      border-color: transparent;
+      font-size: 15px;
+      color: var(--text-muted);
+    }
+
+    .pin-btn.del:hover { color: var(--text-primary); border-color: transparent; background: transparent; }
+
+    #pin-error {
+      margin-top: 1.2rem;
+      font-size: 12px;
+      color: #c0392b;
+      letter-spacing: 0.03em;
+      opacity: 0;
+      transition: opacity 0.2s;
+      height: 16px;
+    }
+
+    #pin-error.show { opacity: 1; }
+
+    /* ── DASHBOARD ── */
+    #dashboard {
+      display: none;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      min-height: 100vh;
       padding: 3.5rem 1.5rem;
     }
 
-    header {
-      text-align: center;
-      margin-bottom: 2.8rem;
-    }
+    #dashboard.visible { display: flex; }
+
+    header { text-align: center; margin-bottom: 2.8rem; }
 
     header h1 {
       font-family: 'DM Serif Display', serif;
@@ -72,22 +184,6 @@
       font-weight: 400;
       letter-spacing: -0.02em;
       line-height: 1.15;
-    }
-
-    .name-ren {
-      color: var(--ren);
-      font-style: italic;
-    }
-
-    .name-mav {
-      color: var(--mav);
-      font-style: normal;
-    }
-
-    .ampersand {
-      color: var(--text-muted);
-      font-style: italic;
-      margin: 0 0.08em;
     }
 
     header p {
@@ -99,10 +195,7 @@
       font-weight: 300;
     }
 
-    .section {
-      width: 100%;
-      max-width: 660px;
-    }
+    .section { width: 100%; max-width: 660px; }
 
     .grid {
       display: grid;
@@ -199,11 +292,7 @@
       font-weight: 300;
     }
 
-    .divider hr {
-      flex: 1;
-      border: none;
-      border-top: 0.5px solid var(--border);
-    }
+    .divider hr { flex: 1; border: none; border-top: 0.5px solid var(--border); }
 
     footer {
       margin-top: 2.8rem;
@@ -238,98 +327,208 @@
 </head>
 <body>
 
-  <header>
-    <h1>
-      <span class="name-ren">Ren</span><span class="ampersand"> &amp; </span><span class="name-mav">Mav</span>'s Home
-    </h1>
-    <p>your household tools</p>
-  </header>
+  <!-- PIN SCREEN -->
+  <div id="pin-screen">
+    <h1><span class="name-ren">Ren</span><span class="ampersand"> &amp; </span><span class="name-mav">Mav</span>'s Home</h1>
+    <p>enter your pin</p>
 
-  <main class="section">
-
-    <!-- Live -->
-    <div class="grid">
-      <a class="app-card" href="https://shopping.reilly.live" target="_blank" rel="noopener noreferrer">
-        <span class="badge badge-live">live</span>
-        <div class="accent accent-teal" aria-hidden="true">
-          <svg class="icon" viewBox="0 0 24 24"><path d="M6 2 3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"/><line x1="3" y1="6" x2="21" y2="6"/><path d="M16 10a4 4 0 0 1-8 0"/></svg>
-        </div>
-        <div class="app-name">Meal Hub</div>
-        <div class="app-desc">Meal plans, shopping list &amp; recipes</div>
-      </a>
+    <div class="pin-dots">
+      <div class="pin-dot" id="d0"></div>
+      <div class="pin-dot" id="d1"></div>
+      <div class="pin-dot" id="d2"></div>
+      <div class="pin-dot" id="d3"></div>
     </div>
 
-    <!-- Coming soon -->
-    <div class="divider"><hr><span>coming soon</span><hr></div>
-
-    <div class="grid">
-
-      <div class="app-card coming-soon">
-        <span class="badge badge-soon">soon</span>
-        <div class="accent accent-amber" aria-hidden="true">
-          <svg class="icon" viewBox="0 0 24 24"><line x1="12" y1="1" x2="12" y2="23"/><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg>
-        </div>
-        <div class="app-name">Budget</div>
-        <div class="app-desc">Track spending together</div>
-      </div>
-
-      <div class="app-card coming-soon">
-        <span class="badge badge-soon">soon</span>
-        <div class="accent accent-blue" aria-hidden="true">
-          <svg class="icon" viewBox="0 0 24 24"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
-        </div>
-        <div class="app-name">Calendar</div>
-        <div class="app-desc">Shared family schedule</div>
-      </div>
-
-      <div class="app-card coming-soon">
-        <span class="badge badge-soon">soon</span>
-        <div class="accent accent-coral" aria-hidden="true">
-          <svg class="icon" viewBox="0 0 24 24"><path d="M10 5.172C10 3.782 8.423 2.679 6.5 3c-2.823.47-4.113 6.006-4 7 .08.703 1.725 1.722 3.656 1 1.261-.472 1.96-1.45 2.344-2.5"/><path d="M14.267 5.172c0-1.39 1.577-2.493 3.5-2.172 2.823.47 4.113 6.006 4 7-.08.703-1.725 1.722-3.656 1-1.261-.472-1.855-1.45-2.239-2.5"/><path d="M8 14v.5M16 14v.5M11.25 16.25h1.5M12 17v1"/><ellipse cx="12" cy="13" rx="4" ry="5"/></svg>
-        </div>
-        <div class="app-name">Pets</div>
-        <div class="app-desc">Pet info &amp; care hub</div>
-      </div>
-
-      <div class="app-card coming-soon">
-        <span class="badge badge-soon">soon</span>
-        <div class="accent accent-purple" aria-hidden="true">
-          <svg class="icon" viewBox="0 0 24 24"><path d="M9 18V5l12-2v13"/><circle cx="6" cy="18" r="3"/><circle cx="18" cy="16" r="3"/></svg>
-        </div>
-        <div class="app-name">Media</div>
-        <div class="app-desc">Music &amp; movie local storage</div>
-      </div>
-
-      <div class="app-card coming-soon">
-        <span class="badge badge-soon">soon</span>
-        <div class="accent accent-green" aria-hidden="true">
-          <svg class="icon" viewBox="0 0 24 24"><path d="M18 8h1a4 4 0 0 1 0 8h-1"/><path d="M2 8h16v9a4 4 0 0 1-4 4H6a4 4 0 0 1-4-4V8z"/><line x1="6" y1="1" x2="6" y2="4"/><line x1="10" y1="1" x2="10" y2="4"/><line x1="14" y1="1" x2="14" y2="4"/></svg>
-        </div>
-        <div class="app-name">Workout Planner</div>
-        <div class="app-desc">Training plans &amp; progress</div>
-      </div>
-
+    <div class="pin-grid">
+      <button class="pin-btn" onclick="press('1')">1</button>
+      <button class="pin-btn" onclick="press('2')">2</button>
+      <button class="pin-btn" onclick="press('3')">3</button>
+      <button class="pin-btn" onclick="press('4')">4</button>
+      <button class="pin-btn" onclick="press('5')">5</button>
+      <button class="pin-btn" onclick="press('6')">6</button>
+      <button class="pin-btn" onclick="press('7')">7</button>
+      <button class="pin-btn" onclick="press('8')">8</button>
+      <button class="pin-btn" onclick="press('9')">9</button>
+      <button class="pin-btn zero" onclick="press('0')">0</button>
+      <button class="pin-btn del" onclick="del()" aria-label="Delete">⌫</button>
     </div>
 
-    <!-- Feedback -->
-    <div class="divider"><hr><span>feedback</span><hr></div>
+    <div id="pin-error">incorrect pin</div>
+  </div>
 
-    <div style="display:grid; gap:11px;">
-      <a class="app-card card-row" href="https://form.typeform.com/to/Ee2dx8VJ" target="_blank" rel="noopener noreferrer">
-        <span class="badge badge-link">↗ form</span>
-        <div class="accent accent-pink" aria-hidden="true">
-          <svg class="icon" viewBox="0 0 24 24"><path d="M12 20h9"/><path d="M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z"/></svg>
+  <!-- DASHBOARD -->
+  <div id="dashboard">
+
+    <header>
+      <h1><span class="name-ren">Ren</span><span class="ampersand"> &amp; </span><span class="name-mav">Mav</span>'s Home</h1>
+      <p>your household tools</p>
+    </header>
+
+    <main class="section">
+
+      <div class="grid">
+        <a class="app-card" href="https://shopping.reilly.live" target="_blank" rel="noopener noreferrer">
+          <span class="badge badge-live">live</span>
+          <div class="accent accent-teal" aria-hidden="true">
+            <svg class="icon" viewBox="0 0 24 24"><path d="M6 2 3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"/><line x1="3" y1="6" x2="21" y2="6"/><path d="M16 10a4 4 0 0 1-8 0"/></svg>
+          </div>
+          <div class="app-name">Meal Hub</div>
+          <div class="app-desc">Meal plans, shopping list &amp; recipes</div>
+        </a>
+      </div>
+
+      <div class="divider"><hr><span>coming soon</span><hr></div>
+
+      <div class="grid">
+
+        <div class="app-card coming-soon">
+          <span class="badge badge-soon">soon</span>
+          <div class="accent accent-amber" aria-hidden="true">
+            <svg class="icon" viewBox="0 0 24 24"><line x1="12" y1="1" x2="12" y2="23"/><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg>
+          </div>
+          <div class="app-name">Budget</div>
+          <div class="app-desc">Track spending together</div>
         </div>
-        <div>
-          <div class="app-name">Request a tool</div>
-          <div class="app-desc">Got an idea? Submit a request and I'll build it</div>
+
+        <div class="app-card coming-soon">
+          <span class="badge badge-soon">soon</span>
+          <div class="accent accent-blue" aria-hidden="true">
+            <svg class="icon" viewBox="0 0 24 24"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
+          </div>
+          <div class="app-name">Calendar</div>
+          <div class="app-desc">Shared family schedule</div>
         </div>
-      </a>
-    </div>
 
-  </main>
+        <div class="app-card coming-soon">
+          <span class="badge badge-soon">soon</span>
+          <div class="accent accent-coral" aria-hidden="true">
+            <svg class="icon" viewBox="0 0 24 24"><path d="M10 5.172C10 3.782 8.423 2.679 6.5 3c-2.823.47-4.113 6.006-4 7 .08.703 1.725 1.722 3.656 1 1.261-.472 1.96-1.45 2.344-2.5"/><path d="M14.267 5.172c0-1.39 1.577-2.493 3.5-2.172 2.823.47 4.113 6.006 4 7-.08.703-1.725 1.722-3.656 1-1.261-.472-1.855-1.45-2.239-2.5"/><path d="M8 14v.5M16 14v.5M11.25 16.25h1.5M12 17v1"/><ellipse cx="12" cy="13" rx="4" ry="5"/></svg>
+          </div>
+          <div class="app-name">Pets</div>
+          <div class="app-desc">Pet info &amp; care hub</div>
+        </div>
 
-  <footer>made with ♥ by your husband</footer>
+        <div class="app-card coming-soon">
+          <span class="badge badge-soon">soon</span>
+          <div class="accent accent-purple" aria-hidden="true">
+            <svg class="icon" viewBox="0 0 24 24"><path d="M9 18V5l12-2v13"/><circle cx="6" cy="18" r="3"/><circle cx="18" cy="16" r="3"/></svg>
+          </div>
+          <div class="app-name">Media</div>
+          <div class="app-desc">Music &amp; movie local storage</div>
+        </div>
+
+        <div class="app-card coming-soon">
+          <span class="badge badge-soon">soon</span>
+          <div class="accent accent-green" aria-hidden="true">
+            <svg class="icon" viewBox="0 0 24 24"><path d="M18 8h1a4 4 0 0 1 0 8h-1"/><path d="M2 8h16v9a4 4 0 0 1-4 4H6a4 4 0 0 1-4-4V8z"/><line x1="6" y1="1" x2="6" y2="4"/><line x1="10" y1="1" x2="10" y2="4"/><line x1="14" y1="1" x2="14" y2="4"/></svg>
+          </div>
+          <div class="app-name">Workout Planner</div>
+          <div class="app-desc">Training plans &amp; progress</div>
+        </div>
+
+      </div>
+
+      <div class="divider"><hr><span>feedback</span><hr></div>
+
+      <div style="display:grid; gap:11px;">
+        <a class="app-card card-row" href="https://form.typeform.com/to/Ee2dx8VJ" target="_blank" rel="noopener noreferrer">
+          <span class="badge badge-link">↗ form</span>
+          <div class="accent accent-pink" aria-hidden="true">
+            <svg class="icon" viewBox="0 0 24 24"><path d="M12 20h9"/><path d="M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z"/></svg>
+          </div>
+          <div>
+            <div class="app-name">Request a tool</div>
+            <div class="app-desc">Got an idea? Submit a request and I'll build it</div>
+          </div>
+        </a>
+      </div>
+
+    </main>
+
+    <footer>made with ♥ by your husband</footer>
+
+  </div>
+
+  <script>
+    const CORRECT = '7437';
+    const SESSION_KEY = 'renmav_auth';
+
+    let entered = '';
+
+    if (sessionStorage.getItem(SESSION_KEY) === 'true') unlock(false);
+
+    function press(digit) {
+      if (entered.length >= 4) return;
+      entered += digit;
+      updateDots();
+      if (entered.length === 4) {
+        setTimeout(check, 120);
+      }
+    }
+
+    function del() {
+      entered = entered.slice(0, -1);
+      updateDots();
+      clearError();
+    }
+
+    function updateDots() {
+      for (let i = 0; i < 4; i++) {
+        const dot = document.getElementById('d' + i);
+        dot.classList.toggle('filled', i < entered.length);
+        dot.classList.remove('error');
+      }
+    }
+
+    function check() {
+      if (entered === CORRECT) {
+        sessionStorage.setItem(SESSION_KEY, 'true');
+        unlock(true);
+      } else {
+        showError();
+        for (let i = 0; i < 4; i++) {
+          const dot = document.getElementById('d' + i);
+          dot.classList.add('error');
+          dot.classList.remove('filled');
+        }
+        setTimeout(() => {
+          entered = '';
+          updateDots();
+        }, 600);
+      }
+    }
+
+    function unlock(animate) {
+      const pin = document.getElementById('pin-screen');
+      const dash = document.getElementById('dashboard');
+      if (animate) {
+        pin.style.transition = 'opacity 0.3s ease';
+        pin.style.opacity = '0';
+        setTimeout(() => {
+          pin.style.display = 'none';
+          dash.classList.add('visible');
+        }, 300);
+      } else {
+        pin.style.display = 'none';
+        dash.classList.add('visible');
+      }
+    }
+
+    function showError() {
+      const el = document.getElementById('pin-error');
+      el.classList.add('show');
+    }
+
+    function clearError() {
+      document.getElementById('pin-error').classList.remove('show');
+    }
+
+    document.addEventListener('keydown', (e) => {
+      if (document.getElementById('pin-screen').style.display === 'none') return;
+      if (e.key >= '0' && e.key <= '9') press(e.key);
+      if (e.key === 'Backspace') del();
+    });
+  </script>
 
 </body>
 </html>
