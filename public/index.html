@@ -109,9 +109,7 @@
       transform: scale(1.15);
     }
 
-    .pin-dot.error {
-      background: #c0392b !important;
-    }
+    .pin-dot.error { background: #c0392b !important; }
 
     .pin-grid {
       display: grid;
@@ -138,10 +136,9 @@
       user-select: none;
     }
 
-    .pin-btn:hover  { background: var(--surface); border-color: var(--border-hover); }
+    .pin-btn:hover  { border-color: var(--border-hover); }
     .pin-btn:active { transform: scale(0.93); }
-
-    .pin-btn.zero { grid-column: 2; }
+    .pin-btn.zero   { grid-column: 2; }
 
     .pin-btn.del {
       background: transparent;
@@ -150,7 +147,7 @@
       color: var(--text-muted);
     }
 
-    .pin-btn.del:hover { color: var(--text-primary); border-color: transparent; background: transparent; }
+    .pin-btn.del:hover { color: var(--text-primary); }
 
     #pin-error {
       margin-top: 1.2rem;
@@ -358,7 +355,6 @@
 
   <!-- DASHBOARD -->
   <div id="dashboard">
-
     <header>
       <h1><span class="name-ren">Ren</span><span class="ampersand"> &amp; </span><span class="name-mav">Mav</span>'s Home</h1>
       <p>your household tools</p>
@@ -446,27 +442,27 @@
     </main>
 
     <footer>made with ♥ by your husband</footer>
-
   </div>
 
   <script>
-    const CORRECT = '7437';
     const SESSION_KEY = 'renmav_auth';
-
     let entered = '';
+    let checking = false;
 
     if (sessionStorage.getItem(SESSION_KEY) === 'true') unlock(false);
 
     function press(digit) {
-      if (entered.length >= 4) return;
+      if (entered.length >= 4 || checking) return;
       entered += digit;
       updateDots();
       if (entered.length === 4) {
+        checking = true;
         setTimeout(check, 120);
       }
     }
 
     function del() {
+      if (checking) return;
       entered = entered.slice(0, -1);
       updateDots();
       clearError();
@@ -480,21 +476,35 @@
       }
     }
 
-    function check() {
-      if (entered === CORRECT) {
-        sessionStorage.setItem(SESSION_KEY, 'true');
-        unlock(true);
-      } else {
-        showError();
-        for (let i = 0; i < 4; i++) {
-          const dot = document.getElementById('d' + i);
-          dot.classList.add('error');
-          dot.classList.remove('filled');
+    async function check() {
+      try {
+        const res = await fetch('/api/verify-pin', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ pin: entered }),
+        });
+        const { ok } = await res.json();
+        if (ok) {
+          sessionStorage.setItem(SESSION_KEY, 'true');
+          unlock(true);
+        } else {
+          showError();
         }
-        setTimeout(() => {
-          entered = '';
-          updateDots();
-        }, 600);
+      } catch (e) {
+        showError();
+      } finally {
+        if (!sessionStorage.getItem(SESSION_KEY)) {
+          for (let i = 0; i < 4; i++) {
+            const dot = document.getElementById('d' + i);
+            dot.classList.add('error');
+            dot.classList.remove('filled');
+          }
+          setTimeout(() => {
+            entered = '';
+            checking = false;
+            updateDots();
+          }, 600);
+        }
       }
     }
 
@@ -515,8 +525,7 @@
     }
 
     function showError() {
-      const el = document.getElementById('pin-error');
-      el.classList.add('show');
+      document.getElementById('pin-error').classList.add('show');
     }
 
     function clearError() {
