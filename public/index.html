@@ -208,11 +208,12 @@
       background: var(--surface);
       border: 0.5px solid var(--border);
       border-radius: var(--radius-lg);
-      padding: 14px 8px 12px;
+      padding: 0;
       display: flex;
       flex-direction: column;
       align-items: center;
-      gap: 8px;
+      justify-content: flex-end;
+      gap: 0;
       text-decoration: none;
       color: inherit;
       position: relative;
@@ -235,110 +236,52 @@
       user-select: none;
     }
 
-    .tile-icon {
-      width: 52px;
-      height: 52px;
-      border-radius: 14px;
+    /* ── ALL TILES — unified graphical style ── */
+
+    /* Every tile is a full-bleed scene */
+    .app-tile {
+      padding: 0 !important;
+      justify-content: flex-end !important;
+    }
+
+    /* The SVG art fills the tile */
+    .tile-art {
+      position: absolute;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+    }
+
+    /* Label bar — inline row, frosted backing */
+    .tile-label {
+      position: relative;
+      z-index: 2;
+      width: 100%;
       display: flex;
       align-items: center;
       justify-content: center;
-      font-size: 24px;
-      flex-shrink: 0;
-    }
-
-    /* standard accent colors */
-    .accent-teal   { background: #E1F5EE; color: #0F6E56; }
-    .accent-blue   { background: #E6F1FB; color: #185FA5; }
-    .accent-amber  { background: #FAEEDA; color: #854F0B; }
-    .accent-coral  { background: #FAECE7; color: #993C1D; }
-    .accent-purple { background: #EEEDFE; color: #534AB7; }
-    .accent-green  { background: #EAF3DE; color: #3B6D11; }
-    .accent-pink   { background: #FBEAF0; color: #993356; }
-
-    /* ── CHARACTER TILES — Ren's Journal & Mav's Quest Log ── */
-
-    /* Ren — mystical night sky, matches Grimoire */
-    .tile-ren {
-      background: #1a1230;
-      border-color: #3a2860;
-      padding: 0;
-      justify-content: flex-end;
-    }
-
-    .tile-ren:hover { border-color: #7a5caa; }
-
-    .tile-ren-art {
-      position: absolute;
-      inset: 0;
-      width: 100%;
-      height: 100%;
-    }
-
-    .tile-ren-label {
-      position: relative;
-      z-index: 2;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
       gap: 5px;
-      padding: 0 6px 11px;
-      width: 100%;
+      padding: 7px 8px 10px;
+      background: linear-gradient(to top, rgba(0,0,0,0.38) 0%, rgba(0,0,0,0) 100%);
     }
 
-    .tile-ren-label .tile-name {
-      color: #e8daf5;
-      text-shadow: 0 1px 4px rgba(0,0,0,0.6);
-    }
-
-    @media (prefers-color-scheme: dark) {
-      .tile-ren { background: #110c20; border-color: #2e1f50; }
-    }
-
-    /* Mav — parchment RPG, matches Adventuring Log */
-    .tile-mav {
-      background: #e9dcc0;
-      border-color: #c2a878;
-      padding: 0;
-      justify-content: flex-end;
-    }
-
-    .tile-mav:hover { border-color: #8a6508; }
-
-    .tile-mav-art {
-      position: absolute;
-      inset: 0;
-      width: 100%;
-      height: 100%;
-    }
-
-    .tile-mav-label {
-      position: relative;
-      z-index: 2;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      gap: 5px;
-      padding: 0 6px 11px;
-      width: 100%;
-    }
-
-    .tile-mav-label .tile-name {
-      color: #3a2a18;
-      font-family: 'Georgia', serif;
-      text-shadow: 0 1px 2px rgba(255,255,255,0.4);
-    }
-
-    @media (prefers-color-scheme: dark) {
-      .tile-mav { background: #1c1208; border-color: #5a4327; }
-      .tile-mav-label .tile-name { color: #ecdcae; }
+    /* light-bg tiles need a lighter scrim */
+    .tile-label.light {
+      background: linear-gradient(to top, rgba(255,255,255,0.55) 0%, rgba(255,255,255,0) 100%);
     }
 
     .tile-name {
-      font-size: 11.5px;
+      font-size: 11px;
       font-weight: 500;
-      color: var(--text-primary);
       text-align: center;
-      line-height: 1.25;
+      line-height: 1.2;
+      color: #ffffff;
+      text-shadow: 0 1px 3px rgba(0,0,0,0.5);
+    }
+
+    .tile-label.light .tile-name {
+      color: #1a1a18;
+      text-shadow: 0 1px 2px rgba(255,255,255,0.6);
     }
 
     .tile-dot {
@@ -348,12 +291,14 @@
       flex-shrink: 0;
     }
 
-    .dot-live { background: #0F6E56; }
-    .dot-soon { background: var(--border); }
+    .dot-live { background: #4ecca3; }
+    .dot-soon { background: rgba(255,255,255,0.35); }
+
+    .tile-label.light .dot-live { background: #0F6E56; }
+    .tile-label.light .dot-soon { background: rgba(0,0,0,0.2); }
 
     @media (prefers-color-scheme: dark) {
       .dot-live { background: #5DCAA5; }
-      .tile-mav-art .parchment-bg { fill: #2b1d10; }
     }
 
     /* divider */
@@ -502,137 +447,288 @@
 
       <div class="app-grid">
 
-        <!-- Ren's Journal — clean night sky tile -->
-        <a class="app-tile tile-ren" href="https://ren.reilly.live" target="_blank" rel="noopener noreferrer">
-          <svg class="tile-ren-art" viewBox="0 0 120 110" xmlns="http://www.w3.org/2000/svg" aria-hidden="true" preserveAspectRatio="xMidYMid slice">
+        <!-- Ren's Journal — night sky + cat -->
+        <a class="app-tile" style="background:#130d28;border-color:#3a2860;" href="https://ren.reilly.live" target="_blank" rel="noopener noreferrer">
+          <svg class="tile-art" viewBox="0 0 120 110" xmlns="http://www.w3.org/2000/svg" aria-hidden="true" preserveAspectRatio="xMidYMid slice">
             <defs>
               <linearGradient id="renSky" x1="0" y1="0" x2="0" y2="1">
                 <stop offset="0%" stop-color="#130d28"/>
                 <stop offset="100%" stop-color="#251545"/>
               </linearGradient>
-              <radialGradient id="renMoonGlow" cx="72%" cy="28%" r="35%">
-                <stop offset="0%" stop-color="#f5e8a0" stop-opacity="0.18"/>
+              <radialGradient id="renMoonGlow" cx="72%" cy="26%" r="32%">
+                <stop offset="0%" stop-color="#f5e8a0" stop-opacity="0.2"/>
                 <stop offset="100%" stop-color="#f5e8a0" stop-opacity="0"/>
               </radialGradient>
             </defs>
             <rect width="120" height="110" fill="url(#renSky)"/>
             <rect width="120" height="110" fill="url(#renMoonGlow)"/>
-            <!-- 5 clean stars -->
             <circle cx="14" cy="11" r="1.3" fill="#e8daf5" opacity="0.85"/>
             <circle cx="38" cy="6"  r="1.0" fill="#e8daf5" opacity="0.7"/>
             <circle cx="58" cy="15" r="1.5" fill="#e8daf5" opacity="0.9"/>
             <circle cx="28" cy="26" r="0.9" fill="#e8daf5" opacity="0.6"/>
             <circle cx="48" cy="30" r="0.7" fill="#e8daf5" opacity="0.5"/>
-            <!-- crescent moon — large, top right -->
             <circle cx="88" cy="24" r="18" fill="#f5e8a0" opacity="0.92"/>
             <circle cx="96" cy="18" r="14" fill="#130d28"/>
-            <!-- cat silhouette — simple block shapes -->
             <g transform="translate(40,108)">
-              <!-- body -->
               <ellipse cx="0" cy="-18" rx="18" ry="20" fill="#111218"/>
-              <!-- head -->
               <ellipse cx="0" cy="-40" rx="15" ry="13" fill="#111218"/>
-              <!-- ears -->
               <polygon points="-15,-48 -10,-64 -4,-48" fill="#111218"/>
               <polygon points="15,-48 10,-64 4,-48" fill="#111218"/>
-              <!-- eyes — the only bright detail -->
               <ellipse cx="-5.5" cy="-41" rx="4.5" ry="4" fill="#7acc44"/>
               <ellipse cx="5.5"  cy="-41" rx="4.5" ry="4" fill="#7acc44"/>
               <ellipse cx="-5.5" cy="-41" rx="1.6" ry="3.5" fill="#0a0810"/>
               <ellipse cx="5.5"  cy="-41" rx="1.6" ry="3.5" fill="#0a0810"/>
             </g>
           </svg>
-          <div class="tile-ren-label">
+          <div class="tile-label">
             <div class="tile-name">Ren's Journal</div>
             <div class="tile-dot dot-live"></div>
           </div>
         </a>
 
-        <!-- Mav's Quest Log — clean parchment RPG tile -->
-        <a class="app-tile tile-mav" href="https://mav.reilly.live" target="_blank" rel="noopener noreferrer">
-          <svg class="tile-mav-art" viewBox="0 0 120 110" xmlns="http://www.w3.org/2000/svg" aria-hidden="true" preserveAspectRatio="xMidYMid slice">
+        <!-- Mav's Quest Log — parchment + shield -->
+        <a class="app-tile" style="background:#e8d9b0;border-color:#c2a878;" href="https://mav.reilly.live" target="_blank" rel="noopener noreferrer">
+          <svg class="tile-art" viewBox="0 0 120 110" xmlns="http://www.w3.org/2000/svg" aria-hidden="true" preserveAspectRatio="xMidYMid slice">
             <defs>
               <linearGradient id="mavParch" x1="0" y1="0" x2="0" y2="1">
                 <stop offset="0%" stop-color="#f0e4c6"/>
-                <stop offset="100%" stop-color="#e0cfa0"/>
+                <stop offset="100%" stop-color="#dcc898"/>
               </linearGradient>
+              <radialGradient id="mavGold" cx="50%" cy="40%" r="42%">
+                <stop offset="0%" stop-color="#d4a820" stop-opacity="0.22"/>
+                <stop offset="100%" stop-color="#d4a820" stop-opacity="0"/>
+              </radialGradient>
             </defs>
-            <rect class="parchment-bg" width="120" height="110" fill="url(#mavParch)"/>
-            <!-- shield — filled, bold, readable -->
-            <path d="M60,12 L84,24 L84,54 C84,70 60,82 60,82 C60,82 36,70 36,54 L36,24 Z"
-              fill="#b8860b" opacity="0.18"/>
-            <path d="M60,12 L84,24 L84,54 C84,70 60,82 60,82 C60,82 36,70 36,54 L36,24 Z"
-              fill="none" stroke="#8a6508" stroke-width="2.5" opacity="0.6"/>
-            <!-- sword — vertical through shield -->
+            <rect width="120" height="110" fill="url(#mavParch)"/>
+            <rect width="120" height="110" fill="url(#mavGold)"/>
+            <path d="M60,12 L84,24 L84,54 C84,70 60,82 60,82 C60,82 36,70 36,54 L36,24 Z" fill="#b8860b" opacity="0.18"/>
+            <path d="M60,12 L84,24 L84,54 C84,70 60,82 60,82 C60,82 36,70 36,54 L36,24 Z" fill="none" stroke="#8a6508" stroke-width="2.5" opacity="0.6"/>
             <line x1="60" y1="4"  x2="60" y2="88" stroke="#8a6508" stroke-width="3.5" stroke-linecap="round" opacity="0.65"/>
-            <!-- crossguard -->
             <line x1="44" y1="30" x2="76" y2="30" stroke="#8a6508" stroke-width="6" stroke-linecap="round" opacity="0.6"/>
-            <!-- pommel circle -->
             <circle cx="60" cy="88" r="5" fill="#8a6508" opacity="0.55"/>
           </svg>
-          <div class="tile-mav-label">
+          <div class="tile-label light">
             <div class="tile-name">Quest Log</div>
             <div class="tile-dot dot-live"></div>
           </div>
         </a>
 
-        <!-- Meal Hub -->
-        <a class="app-tile" href="https://shopping.reilly.live" target="_blank" rel="noopener noreferrer">
-          <div class="tile-icon accent-teal" aria-hidden="true">
-            <svg class="icon" viewBox="0 0 24 24"><path d="M6 2 3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"/><line x1="3" y1="6" x2="21" y2="6"/><path d="M16 10a4 4 0 0 1-8 0"/></svg>
+        <!-- Meal Hub — warm kitchen scene -->
+        <a class="app-tile" style="background:#1a3828;border-color:#2a5438;" href="https://shopping.reilly.live" target="_blank" rel="noopener noreferrer">
+          <svg class="tile-art" viewBox="0 0 120 110" xmlns="http://www.w3.org/2000/svg" aria-hidden="true" preserveAspectRatio="xMidYMid slice">
+            <defs>
+              <linearGradient id="mealBg" x1="0" y1="0" x2="0" y2="1">
+                <stop offset="0%" stop-color="#0f2418"/>
+                <stop offset="100%" stop-color="#1e3d28"/>
+              </linearGradient>
+              <radialGradient id="mealGlow" cx="50%" cy="45%" r="40%">
+                <stop offset="0%" stop-color="#5daa78" stop-opacity="0.2"/>
+                <stop offset="100%" stop-color="#5daa78" stop-opacity="0"/>
+              </radialGradient>
+            </defs>
+            <rect width="120" height="110" fill="url(#mealBg)"/>
+            <rect width="120" height="110" fill="url(#mealGlow)"/>
+            <!-- pot -->
+            <ellipse cx="60" cy="58" rx="30" ry="8" fill="#3a8c58" opacity="0.4"/>
+            <rect x="32" y="42" width="56" height="28" rx="6" fill="#2e7048" opacity="0.7"/>
+            <ellipse cx="60" cy="42" rx="28" ry="7" fill="#3a8c58" opacity="0.8"/>
+            <ellipse cx="60" cy="42" rx="22" ry="5" fill="#1e5038" opacity="0.6"/>
+            <!-- steam lines -->
+            <path d="M48,38 Q46,30 48,22" fill="none" stroke="#a8e8c0" stroke-width="1.5" stroke-linecap="round" opacity="0.5"/>
+            <path d="M60,36 Q58,26 60,16" fill="none" stroke="#a8e8c0" stroke-width="1.5" stroke-linecap="round" opacity="0.6"/>
+            <path d="M72,38 Q70,28 72,20" fill="none" stroke="#a8e8c0" stroke-width="1.5" stroke-linecap="round" opacity="0.5"/>
+            <!-- handles -->
+            <rect x="18" y="46" width="14" height="8" rx="4" fill="#2e7048" opacity="0.7"/>
+            <rect x="88" y="46" width="14" height="8" rx="4" fill="#2e7048" opacity="0.7"/>
+            <!-- veggies on top -->
+            <circle cx="50" cy="42" r="4" fill="#e85454" opacity="0.8"/>
+            <circle cx="62" cy="40" r="3.5" fill="#f0a030" opacity="0.8"/>
+            <circle cx="73" cy="43" r="3" fill="#70c840" opacity="0.8"/>
+          </svg>
+          <div class="tile-label">
+            <div class="tile-name">Meal Hub</div>
+            <div class="tile-dot dot-live"></div>
           </div>
-          <div class="tile-name">Meal Hub</div>
-          <div class="tile-dot dot-live"></div>
         </a>
 
-        <!-- Ledger -->
-        <a class="app-tile" href="https://budget.reilly.live" target="_blank" rel="noopener noreferrer">
-          <div class="tile-icon accent-amber" aria-hidden="true">
-            <svg class="icon" viewBox="0 0 24 24"><line x1="12" y1="1" x2="12" y2="23"/><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg>
+        <!-- Ledger — dark navy coins scene -->
+        <a class="app-tile" style="background:#1a1608;border-color:#3a3010;" href="https://budget.reilly.live" target="_blank" rel="noopener noreferrer">
+          <svg class="tile-art" viewBox="0 0 120 110" xmlns="http://www.w3.org/2000/svg" aria-hidden="true" preserveAspectRatio="xMidYMid slice">
+            <defs>
+              <linearGradient id="ledgBg" x1="0" y1="0" x2="0" y2="1">
+                <stop offset="0%" stop-color="#12100a"/>
+                <stop offset="100%" stop-color="#1e1a0c"/>
+              </linearGradient>
+              <radialGradient id="ledgGlow" cx="50%" cy="50%" r="45%">
+                <stop offset="0%" stop-color="#c8960c" stop-opacity="0.22"/>
+                <stop offset="100%" stop-color="#c8960c" stop-opacity="0"/>
+              </radialGradient>
+            </defs>
+            <rect width="120" height="110" fill="url(#ledgBg)"/>
+            <rect width="120" height="110" fill="url(#ledgGlow)"/>
+            <!-- coin stack left -->
+            <ellipse cx="38" cy="70" rx="14" ry="4.5" fill="#c8960c" opacity="0.8"/>
+            <rect x="24" y="55" width="28" height="15" fill="#c8960c" opacity="0.7"/>
+            <ellipse cx="38" cy="55" rx="14" ry="4.5" fill="#e0b030" opacity="0.85"/>
+            <ellipse cx="38" cy="50" rx="14" ry="4.5" fill="#c8960c" opacity="0.8"/>
+            <rect x="24" y="38" width="28" height="12" fill="#c8960c" opacity="0.65"/>
+            <ellipse cx="38" cy="38" rx="14" ry="4.5" fill="#e0b030" opacity="0.85"/>
+            <!-- coin stack right -->
+            <ellipse cx="82" cy="74" rx="14" ry="4.5" fill="#c8960c" opacity="0.8"/>
+            <rect x="68" y="62" width="28" height="12" fill="#c8960c" opacity="0.7"/>
+            <ellipse cx="82" cy="62" rx="14" ry="4.5" fill="#e0b030" opacity="0.85"/>
+            <!-- dollar sign -->
+            <text x="60" y="48" text-anchor="middle" fill="#e0b030" font-size="28" font-family="Georgia,serif" opacity="0.25" font-weight="bold">$</text>
+            <!-- sparkle top -->
+            <g transform="translate(60,18)" opacity="0.5">
+              <line x1="0" y1="-7" x2="0" y2="7" stroke="#e0b030" stroke-width="1.5"/>
+              <line x1="-7" y1="0" x2="7" y2="0" stroke="#e0b030" stroke-width="1.5"/>
+            </g>
+          </svg>
+          <div class="tile-label">
+            <div class="tile-name">Ledger</div>
+            <div class="tile-dot dot-live"></div>
           </div>
-          <div class="tile-name">Ledger</div>
-          <div class="tile-dot dot-live"></div>
         </a>
 
-        <!-- Pets -->
-        <a class="app-tile" href="https://pets.reilly.live" target="_blank" rel="noopener noreferrer">
-          <div class="tile-icon accent-coral" aria-hidden="true">
-            <svg class="icon" viewBox="0 0 24 24"><path d="M10 5.172C10 3.782 8.423 2.679 6.5 3c-2.823.47-4.113 6.006-4 7 .08.703 1.725 1.722 3.656 1 1.261-.472 1.96-1.45 2.344-2.5"/><path d="M14.267 5.172c0-1.39 1.577-2.493 3.5-2.172 2.823.47 4.113 6.006 4 7-.08.703-1.725 1.722-3.656 1-1.261-.472-1.855-1.45-2.239-2.5"/><path d="M8 14v.5M16 14v.5M11.25 16.25h1.5M12 17v1"/><ellipse cx="12" cy="13" rx="4" ry="5"/></svg>
+        <!-- Pets — warm terracotta, paw + collar -->
+        <a class="app-tile" style="background:#2a1208;border-color:#4a2818;" href="https://pets.reilly.live" target="_blank" rel="noopener noreferrer">
+          <svg class="tile-art" viewBox="0 0 120 110" xmlns="http://www.w3.org/2000/svg" aria-hidden="true" preserveAspectRatio="xMidYMid slice">
+            <defs>
+              <linearGradient id="petBg" x1="0" y1="0" x2="0" y2="1">
+                <stop offset="0%" stop-color="#1e0c04"/>
+                <stop offset="100%" stop-color="#2e1808"/>
+              </linearGradient>
+              <radialGradient id="petGlow" cx="50%" cy="48%" r="40%">
+                <stop offset="0%" stop-color="#d4704a" stop-opacity="0.25"/>
+                <stop offset="100%" stop-color="#d4704a" stop-opacity="0"/>
+              </radialGradient>
+            </defs>
+            <rect width="120" height="110" fill="url(#petBg)"/>
+            <rect width="120" height="110" fill="url(#petGlow)"/>
+            <!-- big paw print — centered -->
+            <!-- main pad -->
+            <ellipse cx="60" cy="62" rx="18" ry="16" fill="#c0603a" opacity="0.7"/>
+            <!-- toe beans -->
+            <ellipse cx="40" cy="44" rx="9" ry="8" fill="#c0603a" opacity="0.65"/>
+            <ellipse cx="57" cy="37" rx="9" ry="8" fill="#c0603a" opacity="0.65"/>
+            <ellipse cx="74" cy="38" rx="9" ry="8" fill="#c0603a" opacity="0.65"/>
+            <ellipse cx="86" cy="50" rx="8" ry="7" fill="#c0603a" opacity="0.6"/>
+            <!-- collar arc above paw -->
+            <path d="M30,26 Q60,14 90,26" fill="none" stroke="#d4704a" stroke-width="5" stroke-linecap="round" opacity="0.5"/>
+            <!-- collar tag -->
+            <circle cx="60" cy="26" r="5" fill="#e88040" opacity="0.6"/>
+            <circle cx="60" cy="26" r="3" fill="#f0a060" opacity="0.5"/>
+          </svg>
+          <div class="tile-label">
+            <div class="tile-name">Pets</div>
+            <div class="tile-dot dot-live"></div>
           </div>
-          <div class="tile-name">Pets</div>
-          <div class="tile-dot dot-live"></div>
         </a>
 
-        <!-- Media -->
-        <a class="app-tile" href="https://media.reilly.live" target="_blank" rel="noopener noreferrer">
-          <div class="tile-icon accent-purple" aria-hidden="true">
-            <svg class="icon" viewBox="0 0 24 24"><path d="M9 18V5l12-2v13"/><circle cx="6" cy="18" r="3"/><circle cx="18" cy="16" r="3"/></svg>
+        <!-- Media — deep indigo, music waves -->
+        <a class="app-tile" style="background:#0e0a24;border-color:#281e50;" href="https://media.reilly.live" target="_blank" rel="noopener noreferrer">
+          <svg class="tile-art" viewBox="0 0 120 110" xmlns="http://www.w3.org/2000/svg" aria-hidden="true" preserveAspectRatio="xMidYMid slice">
+            <defs>
+              <linearGradient id="mediaBg" x1="0" y1="0" x2="0" y2="1">
+                <stop offset="0%" stop-color="#080618"/>
+                <stop offset="100%" stop-color="#120e2c"/>
+              </linearGradient>
+              <radialGradient id="mediaGlow" cx="50%" cy="50%" r="45%">
+                <stop offset="0%" stop-color="#8060d0" stop-opacity="0.28"/>
+                <stop offset="100%" stop-color="#8060d0" stop-opacity="0"/>
+              </radialGradient>
+            </defs>
+            <rect width="120" height="110" fill="url(#mediaBg)"/>
+            <rect width="120" height="110" fill="url(#mediaGlow)"/>
+            <!-- vinyl record -->
+            <circle cx="60" cy="48" r="32" fill="#1e1840" opacity="0.9"/>
+            <circle cx="60" cy="48" r="32" fill="none" stroke="#4030a0" stroke-width="0.8" opacity="0.5"/>
+            <circle cx="60" cy="48" r="26" fill="none" stroke="#4030a0" stroke-width="0.5" opacity="0.4"/>
+            <circle cx="60" cy="48" r="20" fill="none" stroke="#4030a0" stroke-width="0.5" opacity="0.3"/>
+            <circle cx="60" cy="48" r="14" fill="none" stroke="#4030a0" stroke-width="0.5" opacity="0.3"/>
+            <!-- label -->
+            <circle cx="60" cy="48" r="9" fill="#7050c0" opacity="0.7"/>
+            <circle cx="60" cy="48" r="3" fill="#d0b8f8" opacity="0.6"/>
+            <!-- music notes -->
+            <g fill="#a890e8" opacity="0.6">
+              <text x="22" y="32" font-size="14" font-family="serif">♪</text>
+              <text x="84" y="28" font-size="11" font-family="serif">♫</text>
+            </g>
+          </svg>
+          <div class="tile-label">
+            <div class="tile-name">Media</div>
+            <div class="tile-dot dot-live"></div>
           </div>
-          <div class="tile-name">Media</div>
-          <div class="tile-dot dot-live"></div>
         </a>
 
-        <!-- Coming soon: Calendar -->
-        <div class="app-tile coming-soon">
-          <div class="tile-icon accent-blue" aria-hidden="true">
-            <svg class="icon" viewBox="0 0 24 24"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
+        <!-- Calendar — coming soon, soft blue sky -->
+        <div class="app-tile coming-soon" style="background:#0a1828;border-color:#162a40;">
+          <svg class="tile-art" viewBox="0 0 120 110" xmlns="http://www.w3.org/2000/svg" aria-hidden="true" preserveAspectRatio="xMidYMid slice">
+            <defs>
+              <linearGradient id="calBg" x1="0" y1="0" x2="0" y2="1">
+                <stop offset="0%" stop-color="#06101c"/>
+                <stop offset="100%" stop-color="#0e2030"/>
+              </linearGradient>
+            </defs>
+            <rect width="120" height="110" fill="url(#calBg)"/>
+            <!-- calendar grid -->
+            <rect x="22" y="18" width="76" height="68" rx="6" fill="#163050" opacity="0.6"/>
+            <!-- header bar -->
+            <rect x="22" y="18" width="76" height="18" rx="6" fill="#1e4878" opacity="0.7"/>
+            <rect x="22" y="30" width="76" height="6" fill="#1e4878" opacity="0.7"/>
+            <!-- grid dots -->
+            <circle cx="38" cy="52" r="3" fill="#4888c8" opacity="0.6"/>
+            <circle cx="56" cy="52" r="3" fill="#4888c8" opacity="0.6"/>
+            <circle cx="74" cy="52" r="3" fill="#4888c8" opacity="0.6"/>
+            <circle cx="38" cy="66" r="3" fill="#4888c8" opacity="0.5"/>
+            <circle cx="56" cy="66" r="5" fill="#c84848" opacity="0.7"/>
+            <circle cx="74" cy="66" r="3" fill="#4888c8" opacity="0.5"/>
+            <circle cx="92" cy="52" r="3" fill="#4888c8" opacity="0.6"/>
+            <circle cx="92" cy="66" r="3" fill="#4888c8" opacity="0.5"/>
+            <!-- binding rings -->
+            <rect x="42" y="12" width="6" height="12" rx="3" fill="#4888c8" opacity="0.6"/>
+            <rect x="72" y="12" width="6" height="12" rx="3" fill="#4888c8" opacity="0.6"/>
+          </svg>
+          <div class="tile-label">
+            <div class="tile-name">Calendar</div>
+            <div class="tile-dot dot-soon"></div>
           </div>
-          <div class="tile-name">Calendar</div>
-          <div class="tile-dot dot-soon"></div>
         </div>
 
-        <!-- Coming soon: Workout -->
-        <div class="app-tile coming-soon">
-          <div class="tile-icon accent-green" aria-hidden="true">
-            <svg class="icon" viewBox="0 0 24 24"><path d="M18 8h1a4 4 0 0 1 0 8h-1"/><path d="M2 8h16v9a4 4 0 0 1-4 4H6a4 4 0 0 1-4-4V8z"/><line x1="6" y1="1" x2="6" y2="4"/><line x1="10" y1="1" x2="10" y2="4"/><line x1="14" y1="1" x2="14" y2="4"/></svg>
+        <!-- Workout — coming soon, dark slate -->
+        <div class="app-tile coming-soon" style="background:#0e1a10;border-color:#1a3020;">
+          <svg class="tile-art" viewBox="0 0 120 110" xmlns="http://www.w3.org/2000/svg" aria-hidden="true" preserveAspectRatio="xMidYMid slice">
+            <defs>
+              <linearGradient id="wrkBg" x1="0" y1="0" x2="0" y2="1">
+                <stop offset="0%" stop-color="#060e08"/>
+                <stop offset="100%" stop-color="#101c12"/>
+              </linearGradient>
+            </defs>
+            <rect width="120" height="110" fill="url(#wrkBg)"/>
+            <!-- barbell -->
+            <!-- left plate outer -->
+            <rect x="8"  y="36" width="14" height="38" rx="4" fill="#2a5030" opacity="0.8"/>
+            <!-- left plate inner -->
+            <rect x="22" y="42" width="8"  height="26" rx="2" fill="#3a7048" opacity="0.7"/>
+            <!-- bar -->
+            <rect x="30" y="50" width="60" height="10" rx="2" fill="#2e6040" opacity="0.75"/>
+            <!-- right plate inner -->
+            <rect x="90" y="42" width="8"  height="26" rx="2" fill="#3a7048" opacity="0.7"/>
+            <!-- right plate outer -->
+            <rect x="98" y="36" width="14" height="38" rx="4" fill="#2a5030" opacity="0.8"/>
+            <!-- shine on bar -->
+            <rect x="30" y="51" width="60" height="3" rx="1" fill="#5aaa78" opacity="0.2"/>
+          </svg>
+          <div class="tile-label">
+            <div class="tile-name">Workout</div>
+            <div class="tile-dot dot-soon"></div>
           </div>
-          <div class="tile-name">Workout</div>
-          <div class="tile-dot dot-soon"></div>
         </div>
 
       </div>
 
-      <!-- Request a tool -->
+            <!-- Request a tool -->
       <div class="divider"><hr><span>feedback</span><hr></div>
 
       <a class="request-row" href="https://form.typeform.com/to/Ee2dx8VJ" target="_blank" rel="noopener noreferrer">
