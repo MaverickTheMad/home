@@ -502,88 +502,44 @@
 
       <div class="app-grid">
 
-        <!-- Ren's Journal — mystical night sky tile -->
+        <!-- Ren's Journal — clean night sky tile -->
         <a class="app-tile tile-ren" href="https://ren.reilly.live" target="_blank" rel="noopener noreferrer">
           <svg class="tile-ren-art" viewBox="0 0 120 110" xmlns="http://www.w3.org/2000/svg" aria-hidden="true" preserveAspectRatio="xMidYMid slice">
             <defs>
               <linearGradient id="renSky" x1="0" y1="0" x2="0" y2="1">
-                <stop offset="0%" stop-color="#0d0820"/>
-                <stop offset="100%" stop-color="#2a1640"/>
+                <stop offset="0%" stop-color="#130d28"/>
+                <stop offset="100%" stop-color="#251545"/>
               </linearGradient>
-              <radialGradient id="renGlow" cx="50%" cy="80%" r="50%">
-                <stop offset="0%" stop-color="#7c4daa" stop-opacity="0.25"/>
-                <stop offset="100%" stop-color="#7c4daa" stop-opacity="0"/>
+              <radialGradient id="renMoonGlow" cx="72%" cy="28%" r="35%">
+                <stop offset="0%" stop-color="#f5e8a0" stop-opacity="0.18"/>
+                <stop offset="100%" stop-color="#f5e8a0" stop-opacity="0"/>
               </radialGradient>
             </defs>
             <rect width="120" height="110" fill="url(#renSky)"/>
-            <rect width="120" height="110" fill="url(#renGlow)"/>
-            <!-- stars -->
-            <circle cx="10" cy="8" r="0.8" fill="#e8daf5" opacity="0.8"/>
-            <circle cx="28" cy="4" r="0.6" fill="#e8daf5" opacity="0.7"/>
-            <circle cx="50" cy="10" r="1.0" fill="#e8daf5" opacity="0.9"/>
-            <circle cx="72" cy="5" r="0.7" fill="#e8daf5" opacity="0.7"/>
-            <circle cx="95" cy="9" r="0.8" fill="#e8daf5" opacity="0.8"/>
-            <circle cx="110" cy="4" r="0.5" fill="#e8daf5" opacity="0.6"/>
-            <circle cx="18" cy="22" r="0.6" fill="#e8daf5" opacity="0.5"/>
-            <circle cx="38" cy="18" r="0.9" fill="#e8daf5" opacity="0.7"/>
-            <circle cx="85" cy="20" r="0.7" fill="#e8daf5" opacity="0.6"/>
-            <circle cx="105" cy="25" r="0.5" fill="#e8daf5" opacity="0.5"/>
-            <!-- crescent moon -->
-            <g transform="translate(96,18)">
-              <circle cx="0" cy="0" r="10" fill="#f0dfa0" opacity="0.92"/>
-              <circle cx="4" cy="-3" r="8" fill="#0d0820"/>
-            </g>
-            <!-- sparkles -->
-            <g transform="translate(42,30)" opacity="0.6">
-              <line x1="0" y1="-4" x2="0" y2="4" stroke="#d4b8f0" stroke-width="0.8"/>
-              <line x1="-4" y1="0" x2="4" y2="0" stroke="#d4b8f0" stroke-width="0.8"/>
-            </g>
-            <g transform="translate(78,38)" opacity="0.5">
-              <line x1="0" y1="-3" x2="0" y2="3" stroke="#d4b8f0" stroke-width="0.8"/>
-              <line x1="-3" y1="0" x2="3" y2="0" stroke="#d4b8f0" stroke-width="0.8"/>
-            </g>
-            <!-- left botanical -->
-            <g transform="translate(8,110) rotate(3)" opacity="0.55">
-              <line x1="0" y1="0" x2="-1" y2="-42" stroke="#2e6b5e" stroke-width="1.2" stroke-linecap="round"/>
-              <ellipse cx="-5" cy="-15" rx="6" ry="2.5" fill="#2e6b5e" opacity="0.6" transform="rotate(-25 -5 -15)"/>
-              <ellipse cx="-5" cy="-28" rx="5" ry="2" fill="#2e6b5e" opacity="0.5" transform="rotate(-20 -5 -28)"/>
-              <ellipse cx="-4" cy="-38" rx="4" ry="1.8" fill="#2e6b5e" opacity="0.45" transform="rotate(-15 -4 -38)"/>
-            </g>
-            <!-- right botanical -->
-            <g transform="translate(112,110) rotate(-3)" opacity="0.55">
-              <line x1="0" y1="0" x2="1" y2="-40" stroke="#2e6b5e" stroke-width="1.2" stroke-linecap="round"/>
-              <ellipse cx="5" cy="-14" rx="6" ry="2.5" fill="#2e6b5e" opacity="0.6" transform="rotate(25 5 -14)"/>
-              <ellipse cx="5" cy="-27" rx="5" ry="2" fill="#2e6b5e" opacity="0.5" transform="rotate(20 5 -27)"/>
-              <circle cx="2" cy="-42" r="2" fill="#8b2e2e" opacity="0.6"/>
-              <circle cx="6" cy="-40" r="1.5" fill="#8b2e2e" opacity="0.45"/>
-            </g>
-            <!-- tuxedo cat (simplified, centered) -->
-            <g transform="translate(60,108)">
-              <!-- tail -->
-              <path d="M6,-3 C18,-3 24,-10 23,-22 C22,-30 14,-28 14,-20" fill="none" stroke="#111" stroke-width="5" stroke-linecap="round"/>
+            <rect width="120" height="110" fill="url(#renMoonGlow)"/>
+            <!-- 5 clean stars -->
+            <circle cx="14" cy="11" r="1.3" fill="#e8daf5" opacity="0.85"/>
+            <circle cx="38" cy="6"  r="1.0" fill="#e8daf5" opacity="0.7"/>
+            <circle cx="58" cy="15" r="1.5" fill="#e8daf5" opacity="0.9"/>
+            <circle cx="28" cy="26" r="0.9" fill="#e8daf5" opacity="0.6"/>
+            <circle cx="48" cy="30" r="0.7" fill="#e8daf5" opacity="0.5"/>
+            <!-- crescent moon — large, top right -->
+            <circle cx="88" cy="24" r="18" fill="#f5e8a0" opacity="0.92"/>
+            <circle cx="96" cy="18" r="14" fill="#130d28"/>
+            <!-- cat silhouette — simple block shapes -->
+            <g transform="translate(40,108)">
               <!-- body -->
-              <ellipse cx="0" cy="-18" rx="13" ry="17" fill="#111"/>
-              <!-- bib -->
-              <path d="M0,-7 C-3,-7 -3,-13 -2,-20 C-1,-24 1,-24 2,-20 C3,-13 3,-7 0,-7Z" fill="#f0ece0" opacity="0.92"/>
-              <!-- paws -->
-              <ellipse cx="-8" cy="-2" rx="6" ry="3.5" fill="#f0ece0" opacity="0.88"/>
-              <ellipse cx="8" cy="-2" rx="6" ry="3.5" fill="#f0ece0" opacity="0.88"/>
+              <ellipse cx="0" cy="-18" rx="18" ry="20" fill="#111218"/>
               <!-- head -->
-              <ellipse cx="0" cy="-33" rx="11" ry="10" fill="#111"/>
+              <ellipse cx="0" cy="-40" rx="15" ry="13" fill="#111218"/>
               <!-- ears -->
-              <polygon points="-11,-38 -7,-50 -3,-38" fill="#111"/>
-              <polygon points="11,-38 7,-50 3,-38" fill="#111"/>
-              <polygon points="-10,-40 -7,-47 -5,-40" fill="#7a3f3f" opacity="0.5"/>
-              <polygon points="10,-40 7,-47 5,-40" fill="#7a3f3f" opacity="0.5"/>
-              <!-- eyes -->
-              <ellipse cx="-4" cy="-34" rx="3" ry="2.5" fill="#a8d878"/>
-              <ellipse cx="4" cy="-34" rx="3" ry="2.5" fill="#a8d878"/>
-              <ellipse cx="-4" cy="-34" rx="1.2" ry="2.2" fill="#111"/>
-              <ellipse cx="4" cy="-34" rx="1.2" ry="2.2" fill="#111"/>
-              <!-- white mustache patch -->
-              <ellipse cx="0" cy="-28" rx="3" ry="1.5" fill="#f0ece0" opacity="0.7"/>
-              <!-- nose -->
-              <ellipse cx="0" cy="-30" rx="1.2" ry="0.8" fill="#c47a7a"/>
+              <polygon points="-15,-48 -10,-64 -4,-48" fill="#111218"/>
+              <polygon points="15,-48 10,-64 4,-48" fill="#111218"/>
+              <!-- eyes — the only bright detail -->
+              <ellipse cx="-5.5" cy="-41" rx="4.5" ry="4" fill="#7acc44"/>
+              <ellipse cx="5.5"  cy="-41" rx="4.5" ry="4" fill="#7acc44"/>
+              <ellipse cx="-5.5" cy="-41" rx="1.6" ry="3.5" fill="#0a0810"/>
+              <ellipse cx="5.5"  cy="-41" rx="1.6" ry="3.5" fill="#0a0810"/>
             </g>
           </svg>
           <div class="tile-ren-label">
@@ -592,50 +548,27 @@
           </div>
         </a>
 
-        <!-- Mav's Quest Log — parchment RPG tile -->
+        <!-- Mav's Quest Log — clean parchment RPG tile -->
         <a class="app-tile tile-mav" href="https://mav.reilly.live" target="_blank" rel="noopener noreferrer">
           <svg class="tile-mav-art" viewBox="0 0 120 110" xmlns="http://www.w3.org/2000/svg" aria-hidden="true" preserveAspectRatio="xMidYMid slice">
             <defs>
               <linearGradient id="mavParch" x1="0" y1="0" x2="0" y2="1">
-                <stop offset="0%" stop-color="#f3e9d2"/>
-                <stop offset="100%" stop-color="#e9dcc0"/>
+                <stop offset="0%" stop-color="#f0e4c6"/>
+                <stop offset="100%" stop-color="#e0cfa0"/>
               </linearGradient>
-              <radialGradient id="mavGlow" cx="50%" cy="45%" r="45%">
-                <stop offset="0%" stop-color="#e0b341" stop-opacity="0.22"/>
-                <stop offset="100%" stop-color="#e0b341" stop-opacity="0"/>
-              </radialGradient>
             </defs>
             <rect class="parchment-bg" width="120" height="110" fill="url(#mavParch)"/>
-            <rect width="120" height="110" fill="url(#mavGlow)"/>
-            <!-- parchment texture lines -->
-            <line x1="0" y1="20" x2="120" y2="20" stroke="#c2a878" stroke-width="0.3" opacity="0.4"/>
-            <line x1="0" y1="40" x2="120" y2="40" stroke="#c2a878" stroke-width="0.3" opacity="0.4"/>
-            <line x1="0" y1="60" x2="120" y2="60" stroke="#c2a878" stroke-width="0.3" opacity="0.4"/>
-            <line x1="0" y1="80" x2="120" y2="80" stroke="#c2a878" stroke-width="0.3" opacity="0.4"/>
-            <!-- shield -->
-            <path d="M60,18 L75,26 L75,46 C75,56 60,64 60,64 C60,64 45,56 45,46 L45,26 Z" fill="#8a6508" opacity="0.18" stroke="#8a6508" stroke-width="1.2"/>
-            <path d="M60,22 L72,29 L72,46 C72,54 60,60 60,60 C60,60 48,54 48,46 L48,29 Z" fill="#b8860b" opacity="0.12"/>
-            <!-- sword through shield -->
-            <line x1="60" y1="10" x2="60" y2="72" stroke="#8a6508" stroke-width="1.8" stroke-linecap="round" opacity="0.7"/>
-            <line x1="52" y1="30" x2="68" y2="30" stroke="#8a6508" stroke-width="3" stroke-linecap="round" opacity="0.55"/>
-            <!-- sparkle dots (XP stars) -->
-            <circle cx="22" cy="16" r="1.2" fill="#b8860b" opacity="0.5"/>
-            <circle cx="98" cy="14" r="1.0" fill="#b8860b" opacity="0.45"/>
-            <circle cx="15" cy="50" r="0.8" fill="#b8860b" opacity="0.4"/>
-            <circle cx="105" cy="48" r="0.9" fill="#b8860b" opacity="0.4"/>
-            <!-- four-point sparkles -->
-            <g transform="translate(25,36)" opacity="0.45">
-              <line x1="0" y1="-4" x2="0" y2="4" stroke="#b8860b" stroke-width="0.9"/>
-              <line x1="-4" y1="0" x2="4" y2="0" stroke="#b8860b" stroke-width="0.9"/>
-            </g>
-            <g transform="translate(95,38)" opacity="0.4">
-              <line x1="0" y1="-3" x2="0" y2="3" stroke="#b8860b" stroke-width="0.9"/>
-              <line x1="-3" y1="0" x2="3" y2="0" stroke="#b8860b" stroke-width="0.9"/>
-            </g>
-            <!-- scroll unfurling at bottom -->
-            <path d="M20,90 Q60,84 100,90 L100,108 Q60,102 20,108 Z" fill="#d4bf94" opacity="0.45"/>
-            <path d="M20,90 Q18,99 20,108" fill="none" stroke="#c2a878" stroke-width="1" opacity="0.5"/>
-            <path d="M100,90 Q102,99 100,108" fill="none" stroke="#c2a878" stroke-width="1" opacity="0.5"/>
+            <!-- shield — filled, bold, readable -->
+            <path d="M60,12 L84,24 L84,54 C84,70 60,82 60,82 C60,82 36,70 36,54 L36,24 Z"
+              fill="#b8860b" opacity="0.18"/>
+            <path d="M60,12 L84,24 L84,54 C84,70 60,82 60,82 C60,82 36,70 36,54 L36,24 Z"
+              fill="none" stroke="#8a6508" stroke-width="2.5" opacity="0.6"/>
+            <!-- sword — vertical through shield -->
+            <line x1="60" y1="4"  x2="60" y2="88" stroke="#8a6508" stroke-width="3.5" stroke-linecap="round" opacity="0.65"/>
+            <!-- crossguard -->
+            <line x1="44" y1="30" x2="76" y2="30" stroke="#8a6508" stroke-width="6" stroke-linecap="round" opacity="0.6"/>
+            <!-- pommel circle -->
+            <circle cx="60" cy="88" r="5" fill="#8a6508" opacity="0.55"/>
           </svg>
           <div class="tile-mav-label">
             <div class="tile-name">Quest Log</div>
