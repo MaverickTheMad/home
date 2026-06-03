@@ -3,257 +3,177 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Ren & Mav's Home</title>
+  <title>Grove</title>
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=DM+Sans:ital,wght@0,300;0,400;0,500;1,300&display=swap" rel="stylesheet" />
+  <link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,400;0,9..144,600;1,9..144,400&family=Plus+Jakarta+Sans:wght@300;400;500&display=swap" rel="stylesheet" />
   <style>
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
+    /* ── GROVE TOKENS ── */
     :root {
-      --bg: #f9f8f6;
-      --surface: #ffffff;
-      --border: rgba(0,0,0,0.09);
-      --border-hover: rgba(0,0,0,0.2);
-      --text-primary: #1a1a18;
-      --text-secondary: #5f5e5a;
-      --text-muted: #9a9890;
-      --radius-lg: 14px;
-      --ren: #7a3f3f;
-      --mav: #3b5c3b;
+      --bg:          #10140E;
+      --bg-paper:    #171C13;
+      --bg-elevated: #1E241A;
+      --border:      #2A3122;
+      --text:        #ECEFE6;
+      --text-soft:   #9BA690;
+
+      --accent:    #4FA06F;
+      --secondary: #9B82BE;
+
+      --font-display: 'Fraunces', serif;
+      --font-body:    'Plus Jakarta Sans', sans-serif;
+
+      --fs-xs:  0.64rem;
+      --fs-sm:  0.8rem;
+      --fs-base:1rem;
+      --fs-lg:  1.25rem;
+      --fs-2xl: 1.953rem;
+
+      --fw-title: 600;
+      --fw-med:   500;
+      --fw-body:  400;
+
+      --r-sm:  6px;
+      --r-md:  12px;
+      --r-lg:  16px;
+      --r-full:999px;
+
+      --sp-1:4px; --sp-2:8px; --sp-3:12px; --sp-4:16px;
+      --sp-5:24px; --sp-6:32px; --sp-8:48px;
     }
 
-    @media (prefers-color-scheme: dark) {
-      :root {
-        --bg: #1a1a18;
-        --surface: #232321;
-        --border: rgba(255,255,255,0.08);
-        --border-hover: rgba(255,255,255,0.2);
-        --text-primary: #f1efea;
-        --text-secondary: #b4b2a9;
-        --text-muted: #6b6a66;
-        --ren: #c49090;
-        --mav: #85b085;
-      }
-      .accent-teal   { background: #04342C !important; color: #5DCAA5 !important; }
-      .accent-blue   { background: #042C53 !important; color: #85B7EB !important; }
-      .accent-amber  { background: #412402 !important; color: #EF9F27 !important; }
-      .accent-coral  { background: #4A1B0C !important; color: #F0997B !important; }
-      .accent-purple { background: #26215C !important; color: #AFA9EC !important; }
-      .accent-green  { background: #173404 !important; color: #97C459 !important; }
-      .accent-pink   { background: #4B1528 !important; color: #ED93B1 !important; }
-      .pin-dot       { background: rgba(255,255,255,0.15) !important; }
-      .pin-dot.filled { background: var(--text-primary) !important; }
-      .pin-btn       { background: #2e2e2c !important; color: var(--text-primary) !important; }
-      .pin-btn:hover { background: #3a3a38 !important; }
-      .pin-btn.del   { background: transparent !important; }
+    @media (prefers-color-scheme: light) { :root:not(.theme-dark) {
+      --bg:#F3F5EE; --bg-paper:#FAFBF5; --bg-elevated:#FFFFFF;
+      --border:#D8DECF; --text:#1A1F15; --text-soft:#5C6651;
+      --accent:#2F6B47; --secondary:#6E5891;
+    }}
+
+    @media (prefers-reduced-motion: reduce) {
+      *, *::before, *::after { transition-duration: 0ms !important; }
     }
 
+    /* ── BASE ── */
     body {
-      font-family: 'DM Sans', sans-serif;
+      font-family: var(--font-body);
       background: var(--bg);
-      color: var(--text-primary);
-      min-height: 100vh;
-    }
-
-    /* ── PIN SCREEN ── */
-    #pin-screen {
+      color: var(--text);
       min-height: 100vh;
       display: flex;
       flex-direction: column;
       align-items: center;
       justify-content: center;
-      padding: 2rem 1.5rem;
+      padding: var(--sp-8) var(--sp-5) var(--sp-6);
+      -webkit-font-smoothing: antialiased;
     }
 
-    #pin-screen h1 {
-      font-family: 'DM Serif Display', serif;
-      font-size: clamp(1.8rem, 5vw, 2.3rem);
-      font-weight: 400;
-      letter-spacing: -0.02em;
-      margin-bottom: 6px;
-    }
-
-    .name-ren  { color: var(--ren); font-style: italic; }
-    .name-mav  { color: var(--mav); }
-    .ampersand { color: var(--text-muted); font-style: italic; margin: 0 0.08em; }
-
-    #pin-screen p {
-      font-size: 12px;
-      color: var(--text-muted);
-      letter-spacing: 0.07em;
-      text-transform: uppercase;
-      font-weight: 300;
-      margin-bottom: 2.5rem;
-    }
-
-    .pin-dots {
+    /* ── HEADER ── */
+    .header {
       display: flex;
-      gap: 14px;
-      margin-bottom: 2rem;
-    }
-
-    .pin-dot {
-      width: 13px;
-      height: 13px;
-      border-radius: 50%;
-      background: rgba(0,0,0,0.12);
-      transition: background 0.15s ease, transform 0.1s ease;
-    }
-
-    .pin-dot.filled {
-      background: var(--text-primary);
-      transform: scale(1.15);
-    }
-
-    .pin-dot.error { background: #c0392b !important; }
-
-    .pin-grid {
-      display: grid;
-      grid-template-columns: repeat(3, 1fr);
-      gap: 10px;
-      width: 220px;
-    }
-
-    .pin-btn {
-      background: var(--surface);
-      border: 0.5px solid var(--border);
-      border-radius: var(--radius-lg);
-      font-family: 'DM Sans', sans-serif;
-      font-size: 20px;
-      font-weight: 400;
-      color: var(--text-primary);
-      width: 100%;
-      aspect-ratio: 1;
-      cursor: pointer;
-      transition: background 0.1s ease, transform 0.08s ease;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      user-select: none;
-    }
-
-    .pin-btn:hover  { border-color: var(--border-hover); }
-    .pin-btn:active { transform: scale(0.93); }
-    .pin-btn.zero   { grid-column: 2; }
-
-    .pin-btn.del {
-      background: transparent;
-      border-color: transparent;
-      font-size: 15px;
-      color: var(--text-muted);
-    }
-
-    .pin-btn.del:hover { color: var(--text-primary); }
-
-    #pin-error {
-      margin-top: 1.2rem;
-      font-size: 12px;
-      color: #c0392b;
-      letter-spacing: 0.03em;
-      opacity: 0;
-      transition: opacity 0.2s;
-      height: 16px;
-    }
-
-    #pin-error.show { opacity: 1; }
-
-    /* ── DASHBOARD ── */
-    #dashboard {
-      display: none;
       flex-direction: column;
       align-items: center;
-      justify-content: center;
-      min-height: 100vh;
-      padding: 3rem 1.25rem 2.5rem;
+      gap: var(--sp-2);
+      margin-bottom: var(--sp-6);
     }
 
-    #dashboard.visible { display: flex; }
-
-    header {
-      text-align: center;
-      margin-bottom: 2.5rem;
+    .wordmark {
+      display: flex;
+      align-items: center;
+      gap: var(--sp-2);
     }
 
-    header h1 {
-      font-family: 'DM Serif Display', serif;
-      font-size: clamp(2rem, 6vw, 2.8rem);
-      font-weight: 400;
-      letter-spacing: -0.02em;
-      line-height: 1.15;
+    .grove-mark {
+      width: 28px;
+      height: 28px;
+      flex-shrink: 0;
     }
 
-    header p {
-      font-size: 11.5px;
-      color: var(--text-muted);
-      margin-top: 8px;
-      letter-spacing: 0.07em;
+    .grove-name {
+      font-family: var(--font-display);
+      font-size: var(--fs-2xl);
+      font-weight: var(--fw-title);
+      color: var(--text);
+      letter-spacing: -0.025em;
+      line-height: 1;
+    }
+
+    .tagline {
+      font-family: var(--font-body);
+      font-size: var(--fs-xs);
+      color: var(--text-soft);
+      letter-spacing: 0.1em;
       text-transform: uppercase;
-      font-weight: 300;
+      font-weight: var(--fw-body);
     }
 
+    /* ── GRID ── */
     .section {
       width: 100%;
-      max-width: 420px;
+      max-width: 380px;
     }
 
-    /* ── ICON GRID ── */
     .app-grid {
       display: grid;
       grid-template-columns: repeat(3, 1fr);
-      gap: 10px;
+      gap: var(--sp-2);
     }
 
+    /* ── TILE ── */
     .app-tile {
-      background: var(--surface);
+      background: var(--bg-paper);
       border: 0.5px solid var(--border);
-      border-radius: var(--radius-lg);
-      padding: 0;
+      border-radius: var(--r-lg);
       display: flex;
       flex-direction: column;
       align-items: center;
       justify-content: flex-end;
-      gap: 0;
       text-decoration: none;
       color: inherit;
       position: relative;
       overflow: hidden;
       aspect-ratio: 1 / 1;
-      transition: border-color 0.14s ease, transform 0.14s ease, box-shadow 0.14s ease;
+      /* min 44px tap target guaranteed by aspect-ratio on grid */
+      transition: border-color 160ms cubic-bezier(.2,.8,.2,1),
+                  transform    160ms cubic-bezier(.2,.8,.2,1);
       -webkit-tap-highlight-color: transparent;
+      cursor: pointer;
     }
 
-    a.app-tile:hover {
-      border-color: var(--border-hover);
-      transform: translateY(-2px);
-      box-shadow: 0 6px 22px rgba(0,0,0,0.07);
-    }
+    a.app-tile:hover  { border-color: color-mix(in srgb, var(--tile-color) 60%, transparent); transform: translateY(-2px); }
+    a.app-tile:active { transform: scale(0.95); }
 
-    a.app-tile:active { transform: scale(0.96); }
-
-    .app-tile.coming-soon {
-      opacity: 0.4;
-      pointer-events: none;
-      user-select: none;
-    }
-
-    /* ── ALL TILES — unified graphical style ── */
-
-    /* Every tile is a full-bleed scene */
-    .app-tile {
-      padding: 0 !important;
-      justify-content: flex-end !important;
-    }
-
-    /* The SVG art fills the tile */
-    .tile-art {
+    /* colored radial glow from center */
+    .app-tile::before {
+      content: '';
       position: absolute;
       inset: 0;
-      width: 100%;
-      height: 100%;
+      background: radial-gradient(ellipse at 50% 46%, color-mix(in srgb, var(--tile-color) 22%, transparent) 0%, transparent 72%);
+      pointer-events: none;
     }
 
-    /* Label bar — inline row, frosted backing */
+    /* icon — centered, sits above the label */
+    .tile-icon {
+      position: absolute;
+      inset: 0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding-bottom: 22px; /* shift up slightly to account for label */
+    }
+
+    .tile-icon svg {
+      width: 36px;
+      height: 36px;
+      fill: none;
+      stroke: var(--tile-color);
+      stroke-width: 1.7;
+      stroke-linecap: round;
+      stroke-linejoin: round;
+      opacity: 0.82;
+    }
+
+    /* label bar */
     .tile-label {
       position: relative;
       z-index: 2;
@@ -261,587 +181,296 @@
       display: flex;
       align-items: center;
       justify-content: center;
-      gap: 5px;
-      padding: 7px 8px 10px;
-      background: linear-gradient(to top, rgba(0,0,0,0.38) 0%, rgba(0,0,0,0) 100%);
-    }
-
-    /* light-bg tiles need a lighter scrim */
-    .tile-label.light {
-      background: linear-gradient(to top, rgba(255,255,255,0.55) 0%, rgba(255,255,255,0) 100%);
+      gap: var(--sp-1);
+      padding: var(--sp-2) var(--sp-2) var(--sp-3);
+      background: linear-gradient(to top,
+        color-mix(in srgb, var(--bg) 80%, transparent) 0%,
+        transparent 100%);
     }
 
     .tile-name {
-      font-size: 11px;
-      font-weight: 500;
+      font-size: var(--fs-xs);
+      font-weight: var(--fw-med);
+      color: var(--text);
       text-align: center;
       line-height: 1.2;
-      color: #ffffff;
-      text-shadow: 0 1px 3px rgba(0,0,0,0.5);
-    }
-
-    .tile-label.light .tile-name {
-      color: #1a1a18;
-      text-shadow: 0 1px 2px rgba(255,255,255,0.6);
+      letter-spacing: 0.01em;
     }
 
     .tile-dot {
-      width: 5px;
-      height: 5px;
+      width: 4px;
+      height: 4px;
       border-radius: 50%;
       flex-shrink: 0;
+      background: var(--accent);
+      opacity: 0.85;
     }
 
-    .dot-live { background: #4ecca3; }
-    .dot-soon { background: rgba(255,255,255,0.35); }
-
-    .tile-label.light .dot-live { background: #0F6E56; }
-    .tile-label.light .dot-soon { background: rgba(0,0,0,0.2); }
-
-    @media (prefers-color-scheme: dark) {
-      .dot-live { background: #5DCAA5; }
+    /* ── FEEDBACK ── */
+    /* generous whitespace instead of a divider */
+    .feedback-section {
+      margin-top: var(--sp-6);
     }
 
-    /* divider */
-    .divider {
-      display: flex;
-      align-items: center;
-      gap: 10px;
-      margin: 1.4rem 0 1rem;
-    }
-
-    .divider span {
-      font-size: 10.5px;
-      color: var(--text-muted);
-      letter-spacing: 0.08em;
+    .feedback-label {
+      font-size: var(--fs-xs);
+      color: var(--text-soft);
+      letter-spacing: 0.1em;
       text-transform: uppercase;
-      white-space: nowrap;
-      font-weight: 300;
+      font-weight: var(--fw-body);
+      margin-bottom: var(--sp-3);
+      padding-left: var(--sp-1);
     }
 
-    .divider hr { flex: 1; border: none; border-top: 0.5px solid var(--border); }
-
-    /* request row */
     .request-row {
       display: flex;
       align-items: center;
-      gap: 12px;
-      background: var(--surface);
+      gap: var(--sp-3);
+      background: var(--bg-paper);
       border: 0.5px solid var(--border);
-      border-radius: var(--radius-lg);
-      padding: 12px 14px;
+      border-radius: var(--r-lg);
+      padding: var(--sp-3) var(--sp-4);
       text-decoration: none;
       color: inherit;
-      transition: border-color 0.14s ease, transform 0.14s ease;
+      transition: border-color 160ms cubic-bezier(.2,.8,.2,1),
+                  transform    160ms cubic-bezier(.2,.8,.2,1);
       -webkit-tap-highlight-color: transparent;
     }
 
-    .request-row:hover {
-      border-color: var(--border-hover);
-      transform: translateY(-1px);
-    }
-
+    .request-row:hover  { border-color: var(--accent); transform: translateY(-1px); }
     .request-row:active { transform: scale(0.98); }
 
     .req-icon {
-      width: 40px;
-      height: 40px;
-      border-radius: 11px;
+      width: 38px;
+      height: 38px;
+      border-radius: var(--r-md);
+      background: color-mix(in srgb, var(--accent) 14%, var(--bg-paper));
       display: flex;
       align-items: center;
       justify-content: center;
       flex-shrink: 0;
     }
 
+    .req-icon svg {
+      width: 17px;
+      height: 17px;
+      fill: none;
+      stroke: var(--accent);
+      stroke-width: 1.7;
+      stroke-linecap: round;
+      stroke-linejoin: round;
+    }
+
+    .req-copy { flex: 1; }
+
     .req-name {
-      font-size: 13.5px;
-      font-weight: 500;
-      color: var(--text-primary);
-      margin-bottom: 2px;
+      font-size: var(--fs-sm);
+      font-weight: var(--fw-med);
+      color: var(--text);
+      line-height: 1.3;
     }
 
     .req-desc {
-      font-size: 11px;
-      color: var(--text-secondary);
-      font-weight: 300;
+      font-size: var(--fs-xs);
+      color: var(--text-soft);
+      font-weight: var(--fw-body);
+      margin-top: 1px;
     }
 
     .req-arrow {
-      margin-left: auto;
-      font-size: 16px;
-      color: var(--text-muted);
+      font-size: 18px;
+      color: var(--text-soft);
+      flex-shrink: 0;
     }
 
+    /* ── FOOTER ── */
     footer {
-      margin-top: 2.5rem;
-      font-size: 11px;
-      color: var(--text-muted);
-      font-weight: 300;
-      letter-spacing: 0.03em;
+      margin-top: var(--sp-6);
+      font-family: var(--font-display);
       font-style: italic;
-    }
-
-    .icon {
-      display: inline-block;
-      width: 22px;
-      height: 22px;
-      vertical-align: middle;
-      fill: none;
-      stroke: currentColor;
-      stroke-width: 1.6;
-      stroke-linecap: round;
-      stroke-linejoin: round;
-    }
-
-    .icon-sm {
-      display: inline-block;
-      width: 18px;
-      height: 18px;
-      vertical-align: middle;
-      fill: none;
-      stroke: currentColor;
-      stroke-width: 1.6;
-      stroke-linecap: round;
-      stroke-linejoin: round;
+      font-size: var(--fs-xs);
+      color: var(--text-soft);
+      opacity: 0.7;
     }
   </style>
 </head>
 <body>
 
-  <!-- PIN SCREEN -->
-  <div id="pin-screen">
-    <h1><span class="name-ren">Ren</span><span class="ampersand"> &amp; </span><span class="name-mav">Mav</span>'s Home</h1>
-    <p>enter your pin</p>
-
-    <div class="pin-dots">
-      <div class="pin-dot" id="d0"></div>
-      <div class="pin-dot" id="d1"></div>
-      <div class="pin-dot" id="d2"></div>
-      <div class="pin-dot" id="d3"></div>
+  <!-- HEADER -->
+  <div class="header">
+    <div class="wordmark">
+      <svg class="grove-mark" viewBox="0 0 28 28" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+        <path d="M14 25 C14 25 4 19 4 11 C4 6 8.5 3 14 3 C19.5 3 24 6 24 11 C24 19 14 25 14 25Z"
+          stroke="#4FA06F" stroke-width="1.5" stroke-linejoin="round" fill="none"/>
+        <line x1="14" y1="25" x2="14" y2="12" stroke="#4FA06F" stroke-width="1.3" stroke-linecap="round"/>
+        <path d="M14 18 C14 18 10.5 15.5 9 13" stroke="#9B82BE" stroke-width="1.2" stroke-linecap="round"/>
+        <path d="M14 15 C14 15 17 13 19 11" stroke="#9B82BE" stroke-width="1.2" stroke-linecap="round"/>
+      </svg>
+      <span class="grove-name">Grove</span>
     </div>
-
-    <div class="pin-grid">
-      <button class="pin-btn" onclick="press('1')">1</button>
-      <button class="pin-btn" onclick="press('2')">2</button>
-      <button class="pin-btn" onclick="press('3')">3</button>
-      <button class="pin-btn" onclick="press('4')">4</button>
-      <button class="pin-btn" onclick="press('5')">5</button>
-      <button class="pin-btn" onclick="press('6')">6</button>
-      <button class="pin-btn" onclick="press('7')">7</button>
-      <button class="pin-btn" onclick="press('8')">8</button>
-      <button class="pin-btn" onclick="press('9')">9</button>
-      <button class="pin-btn zero" onclick="press('0')">0</button>
-      <button class="pin-btn del" onclick="del()" aria-label="Delete">⌫</button>
-    </div>
-
-    <div id="pin-error">incorrect pin</div>
+    <p class="tagline">Ren &amp; Mav's home</p>
   </div>
 
-  <!-- DASHBOARD -->
-  <div id="dashboard">
-    <header>
-      <h1><span class="name-ren">Ren</span><span class="ampersand"> &amp; </span><span class="name-mav">Mav</span>'s Home</h1>
-      <p>your household tools</p>
-    </header>
+  <main class="section">
 
-    <main class="section">
+    <div class="app-grid">
 
-      <div class="app-grid">
-
-        <!-- Ren's Journal — night sky + cat -->
-        <a class="app-tile" style="background:#130d28;border-color:#3a2860;" href="https://ren.reilly.live" target="_blank" rel="noopener noreferrer">
-          <svg class="tile-art" viewBox="0 0 120 110" xmlns="http://www.w3.org/2000/svg" aria-hidden="true" preserveAspectRatio="xMidYMid slice">
-            <defs>
-              <linearGradient id="renSky" x1="0" y1="0" x2="0" y2="1">
-                <stop offset="0%" stop-color="#130d28"/>
-                <stop offset="100%" stop-color="#251545"/>
-              </linearGradient>
-              <radialGradient id="renMoonGlow" cx="72%" cy="26%" r="32%">
-                <stop offset="0%" stop-color="#f5e8a0" stop-opacity="0.2"/>
-                <stop offset="100%" stop-color="#f5e8a0" stop-opacity="0"/>
-              </radialGradient>
-            </defs>
-            <rect width="120" height="110" fill="url(#renSky)"/>
-            <rect width="120" height="110" fill="url(#renMoonGlow)"/>
-            <circle cx="14" cy="11" r="1.3" fill="#e8daf5" opacity="0.85"/>
-            <circle cx="38" cy="6"  r="1.0" fill="#e8daf5" opacity="0.7"/>
-            <circle cx="58" cy="15" r="1.5" fill="#e8daf5" opacity="0.9"/>
-            <circle cx="28" cy="26" r="0.9" fill="#e8daf5" opacity="0.6"/>
-            <circle cx="48" cy="30" r="0.7" fill="#e8daf5" opacity="0.5"/>
-            <circle cx="88" cy="24" r="18" fill="#f5e8a0" opacity="0.92"/>
-            <circle cx="96" cy="18" r="14" fill="#130d28"/>
-            <g transform="translate(40,108)">
-              <ellipse cx="0" cy="-18" rx="18" ry="20" fill="#111218"/>
-              <ellipse cx="0" cy="-40" rx="15" ry="13" fill="#111218"/>
-              <polygon points="-15,-48 -10,-64 -4,-48" fill="#111218"/>
-              <polygon points="15,-48 10,-64 4,-48" fill="#111218"/>
-              <ellipse cx="-5.5" cy="-41" rx="4.5" ry="4" fill="#7acc44"/>
-              <ellipse cx="5.5"  cy="-41" rx="4.5" ry="4" fill="#7acc44"/>
-              <ellipse cx="-5.5" cy="-41" rx="1.6" ry="3.5" fill="#0a0810"/>
-              <ellipse cx="5.5"  cy="-41" rx="1.6" ry="3.5" fill="#0a0810"/>
-            </g>
+      <!-- Ren's Journal — Berry #D06A82 -->
+      <a class="app-tile" href="https://ren.reilly.live" target="_blank" rel="noopener noreferrer"
+         style="--tile-color:#D06A82; background:#130a14;">
+        <div class="tile-icon" aria-hidden="true">
+          <svg viewBox="0 0 24 24">
+            <path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"/>
+            <path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"/>
           </svg>
-          <div class="tile-label">
-            <div class="tile-name">Ren's Journal</div>
-            <div class="tile-dot dot-live"></div>
-          </div>
-        </a>
-
-        <!-- Mav's Quest Log — parchment + shield -->
-        <a class="app-tile" style="background:#e8d9b0;border-color:#c2a878;" href="https://mav.reilly.live" target="_blank" rel="noopener noreferrer">
-          <svg class="tile-art" viewBox="0 0 120 110" xmlns="http://www.w3.org/2000/svg" aria-hidden="true" preserveAspectRatio="xMidYMid slice">
-            <defs>
-              <linearGradient id="mavParch" x1="0" y1="0" x2="0" y2="1">
-                <stop offset="0%" stop-color="#f0e4c6"/>
-                <stop offset="100%" stop-color="#dcc898"/>
-              </linearGradient>
-              <radialGradient id="mavGold" cx="50%" cy="40%" r="42%">
-                <stop offset="0%" stop-color="#d4a820" stop-opacity="0.22"/>
-                <stop offset="100%" stop-color="#d4a820" stop-opacity="0"/>
-              </radialGradient>
-            </defs>
-            <rect width="120" height="110" fill="url(#mavParch)"/>
-            <rect width="120" height="110" fill="url(#mavGold)"/>
-            <path d="M60,12 L84,24 L84,54 C84,70 60,82 60,82 C60,82 36,70 36,54 L36,24 Z" fill="#b8860b" opacity="0.18"/>
-            <path d="M60,12 L84,24 L84,54 C84,70 60,82 60,82 C60,82 36,70 36,54 L36,24 Z" fill="none" stroke="#8a6508" stroke-width="2.5" opacity="0.6"/>
-            <line x1="60" y1="4"  x2="60" y2="88" stroke="#8a6508" stroke-width="3.5" stroke-linecap="round" opacity="0.65"/>
-            <line x1="44" y1="30" x2="76" y2="30" stroke="#8a6508" stroke-width="6" stroke-linecap="round" opacity="0.6"/>
-            <circle cx="60" cy="88" r="5" fill="#8a6508" opacity="0.55"/>
-          </svg>
-          <div class="tile-label light">
-            <div class="tile-name">Quest Log</div>
-            <div class="tile-dot dot-live"></div>
-          </div>
-        </a>
-
-        <!-- Meal Hub — warm kitchen scene -->
-        <a class="app-tile" style="background:#1a3828;border-color:#2a5438;" href="https://shopping.reilly.live" target="_blank" rel="noopener noreferrer">
-          <svg class="tile-art" viewBox="0 0 120 110" xmlns="http://www.w3.org/2000/svg" aria-hidden="true" preserveAspectRatio="xMidYMid slice">
-            <defs>
-              <linearGradient id="mealBg" x1="0" y1="0" x2="0" y2="1">
-                <stop offset="0%" stop-color="#0f2418"/>
-                <stop offset="100%" stop-color="#1e3d28"/>
-              </linearGradient>
-              <radialGradient id="mealGlow" cx="50%" cy="45%" r="40%">
-                <stop offset="0%" stop-color="#5daa78" stop-opacity="0.2"/>
-                <stop offset="100%" stop-color="#5daa78" stop-opacity="0"/>
-              </radialGradient>
-            </defs>
-            <rect width="120" height="110" fill="url(#mealBg)"/>
-            <rect width="120" height="110" fill="url(#mealGlow)"/>
-            <!-- pot -->
-            <ellipse cx="60" cy="58" rx="30" ry="8" fill="#3a8c58" opacity="0.4"/>
-            <rect x="32" y="42" width="56" height="28" rx="6" fill="#2e7048" opacity="0.7"/>
-            <ellipse cx="60" cy="42" rx="28" ry="7" fill="#3a8c58" opacity="0.8"/>
-            <ellipse cx="60" cy="42" rx="22" ry="5" fill="#1e5038" opacity="0.6"/>
-            <!-- steam lines -->
-            <path d="M48,38 Q46,30 48,22" fill="none" stroke="#a8e8c0" stroke-width="1.5" stroke-linecap="round" opacity="0.5"/>
-            <path d="M60,36 Q58,26 60,16" fill="none" stroke="#a8e8c0" stroke-width="1.5" stroke-linecap="round" opacity="0.6"/>
-            <path d="M72,38 Q70,28 72,20" fill="none" stroke="#a8e8c0" stroke-width="1.5" stroke-linecap="round" opacity="0.5"/>
-            <!-- handles -->
-            <rect x="18" y="46" width="14" height="8" rx="4" fill="#2e7048" opacity="0.7"/>
-            <rect x="88" y="46" width="14" height="8" rx="4" fill="#2e7048" opacity="0.7"/>
-            <!-- veggies on top -->
-            <circle cx="50" cy="42" r="4" fill="#e85454" opacity="0.8"/>
-            <circle cx="62" cy="40" r="3.5" fill="#f0a030" opacity="0.8"/>
-            <circle cx="73" cy="43" r="3" fill="#70c840" opacity="0.8"/>
-          </svg>
-          <div class="tile-label">
-            <div class="tile-name">Meal Hub</div>
-            <div class="tile-dot dot-live"></div>
-          </div>
-        </a>
-
-        <!-- Ledger — dark navy coins scene -->
-        <a class="app-tile" style="background:#1a1608;border-color:#3a3010;" href="https://budget.reilly.live" target="_blank" rel="noopener noreferrer">
-          <svg class="tile-art" viewBox="0 0 120 110" xmlns="http://www.w3.org/2000/svg" aria-hidden="true" preserveAspectRatio="xMidYMid slice">
-            <defs>
-              <linearGradient id="ledgBg" x1="0" y1="0" x2="0" y2="1">
-                <stop offset="0%" stop-color="#12100a"/>
-                <stop offset="100%" stop-color="#1e1a0c"/>
-              </linearGradient>
-              <radialGradient id="ledgGlow" cx="50%" cy="50%" r="45%">
-                <stop offset="0%" stop-color="#c8960c" stop-opacity="0.22"/>
-                <stop offset="100%" stop-color="#c8960c" stop-opacity="0"/>
-              </radialGradient>
-            </defs>
-            <rect width="120" height="110" fill="url(#ledgBg)"/>
-            <rect width="120" height="110" fill="url(#ledgGlow)"/>
-            <!-- coin stack left -->
-            <ellipse cx="38" cy="70" rx="14" ry="4.5" fill="#c8960c" opacity="0.8"/>
-            <rect x="24" y="55" width="28" height="15" fill="#c8960c" opacity="0.7"/>
-            <ellipse cx="38" cy="55" rx="14" ry="4.5" fill="#e0b030" opacity="0.85"/>
-            <ellipse cx="38" cy="50" rx="14" ry="4.5" fill="#c8960c" opacity="0.8"/>
-            <rect x="24" y="38" width="28" height="12" fill="#c8960c" opacity="0.65"/>
-            <ellipse cx="38" cy="38" rx="14" ry="4.5" fill="#e0b030" opacity="0.85"/>
-            <!-- coin stack right -->
-            <ellipse cx="82" cy="74" rx="14" ry="4.5" fill="#c8960c" opacity="0.8"/>
-            <rect x="68" y="62" width="28" height="12" fill="#c8960c" opacity="0.7"/>
-            <ellipse cx="82" cy="62" rx="14" ry="4.5" fill="#e0b030" opacity="0.85"/>
-            <!-- dollar sign -->
-            <text x="60" y="48" text-anchor="middle" fill="#e0b030" font-size="28" font-family="Georgia,serif" opacity="0.25" font-weight="bold">$</text>
-            <!-- sparkle top -->
-            <g transform="translate(60,18)" opacity="0.5">
-              <line x1="0" y1="-7" x2="0" y2="7" stroke="#e0b030" stroke-width="1.5"/>
-              <line x1="-7" y1="0" x2="7" y2="0" stroke="#e0b030" stroke-width="1.5"/>
-            </g>
-          </svg>
-          <div class="tile-label">
-            <div class="tile-name">Ledger</div>
-            <div class="tile-dot dot-live"></div>
-          </div>
-        </a>
-
-        <!-- Pets — warm terracotta, paw + collar -->
-        <a class="app-tile" style="background:#2a1208;border-color:#4a2818;" href="https://pets.reilly.live" target="_blank" rel="noopener noreferrer">
-          <svg class="tile-art" viewBox="0 0 120 110" xmlns="http://www.w3.org/2000/svg" aria-hidden="true" preserveAspectRatio="xMidYMid slice">
-            <defs>
-              <linearGradient id="petBg" x1="0" y1="0" x2="0" y2="1">
-                <stop offset="0%" stop-color="#1e0c04"/>
-                <stop offset="100%" stop-color="#2e1808"/>
-              </linearGradient>
-              <radialGradient id="petGlow" cx="50%" cy="48%" r="40%">
-                <stop offset="0%" stop-color="#d4704a" stop-opacity="0.25"/>
-                <stop offset="100%" stop-color="#d4704a" stop-opacity="0"/>
-              </radialGradient>
-            </defs>
-            <rect width="120" height="110" fill="url(#petBg)"/>
-            <rect width="120" height="110" fill="url(#petGlow)"/>
-            <!-- big paw print — centered -->
-            <!-- main pad -->
-            <ellipse cx="60" cy="62" rx="18" ry="16" fill="#c0603a" opacity="0.7"/>
-            <!-- toe beans -->
-            <ellipse cx="40" cy="44" rx="9" ry="8" fill="#c0603a" opacity="0.65"/>
-            <ellipse cx="57" cy="37" rx="9" ry="8" fill="#c0603a" opacity="0.65"/>
-            <ellipse cx="74" cy="38" rx="9" ry="8" fill="#c0603a" opacity="0.65"/>
-            <ellipse cx="86" cy="50" rx="8" ry="7" fill="#c0603a" opacity="0.6"/>
-            <!-- collar arc above paw -->
-            <path d="M30,26 Q60,14 90,26" fill="none" stroke="#d4704a" stroke-width="5" stroke-linecap="round" opacity="0.5"/>
-            <!-- collar tag -->
-            <circle cx="60" cy="26" r="5" fill="#e88040" opacity="0.6"/>
-            <circle cx="60" cy="26" r="3" fill="#f0a060" opacity="0.5"/>
-          </svg>
-          <div class="tile-label">
-            <div class="tile-name">Pets</div>
-            <div class="tile-dot dot-live"></div>
-          </div>
-        </a>
-
-        <!-- Media — deep indigo, music waves -->
-        <a class="app-tile" style="background:#0e0a24;border-color:#281e50;" href="https://media.reilly.live" target="_blank" rel="noopener noreferrer">
-          <svg class="tile-art" viewBox="0 0 120 110" xmlns="http://www.w3.org/2000/svg" aria-hidden="true" preserveAspectRatio="xMidYMid slice">
-            <defs>
-              <linearGradient id="mediaBg" x1="0" y1="0" x2="0" y2="1">
-                <stop offset="0%" stop-color="#080618"/>
-                <stop offset="100%" stop-color="#120e2c"/>
-              </linearGradient>
-              <radialGradient id="mediaGlow" cx="50%" cy="50%" r="45%">
-                <stop offset="0%" stop-color="#8060d0" stop-opacity="0.28"/>
-                <stop offset="100%" stop-color="#8060d0" stop-opacity="0"/>
-              </radialGradient>
-            </defs>
-            <rect width="120" height="110" fill="url(#mediaBg)"/>
-            <rect width="120" height="110" fill="url(#mediaGlow)"/>
-            <!-- vinyl record -->
-            <circle cx="60" cy="48" r="32" fill="#1e1840" opacity="0.9"/>
-            <circle cx="60" cy="48" r="32" fill="none" stroke="#4030a0" stroke-width="0.8" opacity="0.5"/>
-            <circle cx="60" cy="48" r="26" fill="none" stroke="#4030a0" stroke-width="0.5" opacity="0.4"/>
-            <circle cx="60" cy="48" r="20" fill="none" stroke="#4030a0" stroke-width="0.5" opacity="0.3"/>
-            <circle cx="60" cy="48" r="14" fill="none" stroke="#4030a0" stroke-width="0.5" opacity="0.3"/>
-            <!-- label -->
-            <circle cx="60" cy="48" r="9" fill="#7050c0" opacity="0.7"/>
-            <circle cx="60" cy="48" r="3" fill="#d0b8f8" opacity="0.6"/>
-            <!-- music notes -->
-            <g fill="#a890e8" opacity="0.6">
-              <text x="22" y="32" font-size="14" font-family="serif">♪</text>
-              <text x="84" y="28" font-size="11" font-family="serif">♫</text>
-            </g>
-          </svg>
-          <div class="tile-label">
-            <div class="tile-name">Media</div>
-            <div class="tile-dot dot-live"></div>
-          </div>
-        </a>
-
-        <!-- Calendar — live -->
-        <a class="app-tile" href="https://almanac.reilly.live" target="_blank" rel="noopener noreferrer" style="background:#0a1828;border-color:#162a40;">
-          <svg class="tile-art" viewBox="0 0 120 110" xmlns="http://www.w3.org/2000/svg" aria-hidden="true" preserveAspectRatio="xMidYMid slice">
-            <defs>
-              <linearGradient id="calBg" x1="0" y1="0" x2="0" y2="1">
-                <stop offset="0%" stop-color="#06101c"/>
-                <stop offset="100%" stop-color="#0e2030"/>
-              </linearGradient>
-            </defs>
-            <rect width="120" height="110" fill="url(#calBg)"/>
-            <!-- calendar grid -->
-            <rect x="22" y="18" width="76" height="68" rx="6" fill="#163050" opacity="0.6"/>
-            <!-- header bar -->
-            <rect x="22" y="18" width="76" height="18" rx="6" fill="#1e4878" opacity="0.7"/>
-            <rect x="22" y="30" width="76" height="6" fill="#1e4878" opacity="0.7"/>
-            <!-- grid dots -->
-            <circle cx="38" cy="52" r="3" fill="#4888c8" opacity="0.6"/>
-            <circle cx="56" cy="52" r="3" fill="#4888c8" opacity="0.6"/>
-            <circle cx="74" cy="52" r="3" fill="#4888c8" opacity="0.6"/>
-            <circle cx="38" cy="66" r="3" fill="#4888c8" opacity="0.5"/>
-            <circle cx="56" cy="66" r="5" fill="#c84848" opacity="0.7"/>
-            <circle cx="74" cy="66" r="3" fill="#4888c8" opacity="0.5"/>
-            <circle cx="92" cy="52" r="3" fill="#4888c8" opacity="0.6"/>
-            <circle cx="92" cy="66" r="3" fill="#4888c8" opacity="0.5"/>
-            <!-- binding rings -->
-            <rect x="42" y="12" width="6" height="12" rx="3" fill="#4888c8" opacity="0.6"/>
-            <rect x="72" y="12" width="6" height="12" rx="3" fill="#4888c8" opacity="0.6"/>
-          </svg>
-          <div class="tile-label">
-            <div class="tile-name">Calendar</div>
-            <div class="tile-dot dot-soon"></div>
-          </div>
         </div>
+        <div class="tile-label">
+          <span class="tile-name">Ren's Journal</span>
+          <span class="tile-dot"></span>
+        </div>
+      </a>
 
-        <!-- Workout — live -->
-        <a class="app-tile" href="https://fitness.reilly.live" target="_blank" rel="noopener noreferrer" style="background:#0e1a10;border-color:#1a3020;">
-          <svg class="tile-art" viewBox="0 0 120 110" xmlns="http://www.w3.org/2000/svg" aria-hidden="true" preserveAspectRatio="xMidYMid slice">
-            <defs>
-              <linearGradient id="wrkBg" x1="0" y1="0" x2="0" y2="1">
-                <stop offset="0%" stop-color="#060e08"/>
-                <stop offset="100%" stop-color="#101c12"/>
-              </linearGradient>
-            </defs>
-            <rect width="120" height="110" fill="url(#wrkBg)"/>
-            <!-- barbell -->
-            <!-- left plate outer -->
-            <rect x="8"  y="36" width="14" height="38" rx="4" fill="#2a5030" opacity="0.8"/>
-            <!-- left plate inner -->
-            <rect x="22" y="42" width="8"  height="26" rx="2" fill="#3a7048" opacity="0.7"/>
-            <!-- bar -->
-            <rect x="30" y="50" width="60" height="10" rx="2" fill="#2e6040" opacity="0.75"/>
-            <!-- right plate inner -->
-            <rect x="90" y="42" width="8"  height="26" rx="2" fill="#3a7048" opacity="0.7"/>
-            <!-- right plate outer -->
-            <rect x="98" y="36" width="14" height="38" rx="4" fill="#2a5030" opacity="0.8"/>
-            <!-- shine on bar -->
-            <rect x="30" y="51" width="60" height="3" rx="1" fill="#5aaa78" opacity="0.2"/>
+      <!-- Quest Log — Plum #A877B8 -->
+      <a class="app-tile" href="https://mav.reilly.live" target="_blank" rel="noopener noreferrer"
+         style="--tile-color:#A877B8; background:#0e0a14;">
+        <div class="tile-icon" aria-hidden="true">
+          <svg viewBox="0 0 24 24">
+            <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/>
           </svg>
-          <div class="tile-label">
-            <div class="tile-name">Workout</div>
-            <div class="tile-dot dot-live"></div>
-          </div>
-        </a>
+        </div>
+        <div class="tile-label">
+          <span class="tile-name">Quest Log</span>
+          <span class="tile-dot"></span>
+        </div>
+      </a>
 
-      </div>
+      <!-- Meal Hub — Clay #CB7A4F -->
+      <a class="app-tile" href="https://shopping.reilly.live" target="_blank" rel="noopener noreferrer"
+         style="--tile-color:#CB7A4F; background:#120c08;">
+        <div class="tile-icon" aria-hidden="true">
+          <svg viewBox="0 0 24 24">
+            <path d="M6 2 3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"/>
+            <line x1="3" y1="6" x2="21" y2="6"/>
+            <path d="M16 10a4 4 0 0 1-8 0"/>
+          </svg>
+        </div>
+        <div class="tile-label">
+          <span class="tile-name">Meal Hub</span>
+          <span class="tile-dot"></span>
+        </div>
+      </a>
 
-            <!-- Request a tool -->
-      <div class="divider"><hr><span>feedback</span><hr></div>
+      <!-- Ledger — Dusk #6F86C2 -->
+      <a class="app-tile" href="https://budget.reilly.live" target="_blank" rel="noopener noreferrer"
+         style="--tile-color:#6F86C2; background:#08090e;">
+        <div class="tile-icon" aria-hidden="true">
+          <svg viewBox="0 0 24 24">
+            <line x1="12" y1="1" x2="12" y2="23"/>
+            <path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/>
+          </svg>
+        </div>
+        <div class="tile-label">
+          <span class="tile-name">Ledger</span>
+          <span class="tile-dot"></span>
+        </div>
+      </a>
 
+      <!-- Pets — Honey #D8A24F -->
+      <a class="app-tile" href="https://pets.reilly.live" target="_blank" rel="noopener noreferrer"
+         style="--tile-color:#D8A24F; background:#120e06;">
+        <div class="tile-icon" aria-hidden="true">
+          <svg viewBox="0 0 24 24">
+            <circle cx="11" cy="4" r="2"/>
+            <circle cx="18" cy="8" r="2"/>
+            <circle cx="20" cy="16" r="2"/>
+            <path d="M9 10a5 5 0 0 1 5 5v3.5a3.5 3.5 0 0 1-6.84 1.045Q6.52 17.48 4.46 16.84A3.5 3.5 0 0 1 5.5 10Z"/>
+          </svg>
+        </div>
+        <div class="tile-label">
+          <span class="tile-name">Pets</span>
+          <span class="tile-dot"></span>
+        </div>
+      </a>
+
+      <!-- Media — Tide #4CA39B -->
+      <a class="app-tile" href="https://media.reilly.live" target="_blank" rel="noopener noreferrer"
+         style="--tile-color:#4CA39B; background:#060e0e;">
+        <div class="tile-icon" aria-hidden="true">
+          <svg viewBox="0 0 24 24">
+            <path d="M9 18V5l12-2v13"/>
+            <circle cx="6" cy="18" r="3"/>
+            <circle cx="18" cy="16" r="3"/>
+          </svg>
+        </div>
+        <div class="tile-label">
+          <span class="tile-name">Media</span>
+          <span class="tile-dot"></span>
+        </div>
+      </a>
+
+      <!-- Calendar — Fern #79B45F -->
+      <a class="app-tile" href="https://almanac.reilly.live" target="_blank" rel="noopener noreferrer"
+         style="--tile-color:#79B45F; background:#080e06;">
+        <div class="tile-icon" aria-hidden="true">
+          <svg viewBox="0 0 24 24">
+            <rect x="3" y="4" width="18" height="18" rx="2"/>
+            <line x1="16" y1="2" x2="16" y2="6"/>
+            <line x1="8"  y1="2" x2="8"  y2="6"/>
+            <line x1="3"  y1="10" x2="21" y2="10"/>
+            <line x1="8"  y1="14" x2="8"  y2="14" stroke-width="2.5"/>
+            <line x1="12" y1="14" x2="12" y2="14" stroke-width="2.5"/>
+            <line x1="16" y1="14" x2="16" y2="14" stroke-width="2.5"/>
+            <line x1="8"  y1="18" x2="8"  y2="18" stroke-width="2.5"/>
+            <line x1="12" y1="18" x2="12" y2="18" stroke-width="2.5"/>
+          </svg>
+        </div>
+        <div class="tile-label">
+          <span class="tile-name">Calendar</span>
+          <span class="tile-dot"></span>
+        </div>
+      </a>
+
+      <!-- Workout — house green #4FA06F -->
+      <a class="app-tile" href="https://fitness.reilly.live" target="_blank" rel="noopener noreferrer"
+         style="--tile-color:#4FA06F; background:#070e08;">
+        <div class="tile-icon" aria-hidden="true">
+          <svg viewBox="0 0 24 24">
+            <line x1="6.5" y1="12" x2="17.5" y2="12" stroke-width="2.5"/>
+            <line x1="4" y1="8.5" x2="4" y2="15.5" stroke-width="3.5"/>
+            <line x1="2" y1="10" x2="2" y2="14" stroke-width="3.5"/>
+            <line x1="20" y1="8.5" x2="20" y2="15.5" stroke-width="3.5"/>
+            <line x1="22" y1="10" x2="22" y2="14" stroke-width="3.5"/>
+          </svg>
+        </div>
+        <div class="tile-label">
+          <span class="tile-name">Workout</span>
+          <span class="tile-dot"></span>
+        </div>
+      </a>
+
+    </div>
+
+    <!-- Request a tool -->
+    <div class="feedback-section">
+      <p class="feedback-label">Feedback</p>
       <a class="request-row" href="https://form.typeform.com/to/Ee2dx8VJ" target="_blank" rel="noopener noreferrer">
-        <div class="req-icon accent-pink" aria-hidden="true">
-          <svg class="icon-sm" viewBox="0 0 24 24"><path d="M12 20h9"/><path d="M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z"/></svg>
+        <div class="req-icon">
+          <svg viewBox="0 0 24 24">
+            <path d="M12 20h9"/>
+            <path d="M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z"/>
+          </svg>
         </div>
-        <div>
+        <div class="req-copy">
           <div class="req-name">Request a tool</div>
           <div class="req-desc">Got an idea? I'll build it</div>
         </div>
         <span class="req-arrow">›</span>
       </a>
+    </div>
 
-    </main>
+  </main>
 
-    <footer>made with ♥ by your husband</footer>
-  </div>
-
-  <script>
-    const SESSION_KEY = 'renmav_auth';
-    let entered = '';
-    let checking = false;
-
-    if (sessionStorage.getItem(SESSION_KEY) === 'true') unlock(false);
-
-    function press(digit) {
-      if (entered.length >= 4 || checking) return;
-      entered += digit;
-      updateDots();
-      if (entered.length === 4) {
-        checking = true;
-        setTimeout(check, 120);
-      }
-    }
-
-    function del() {
-      if (checking) return;
-      entered = entered.slice(0, -1);
-      updateDots();
-      clearError();
-    }
-
-    function updateDots() {
-      for (let i = 0; i < 4; i++) {
-        const dot = document.getElementById('d' + i);
-        dot.classList.toggle('filled', i < entered.length);
-        dot.classList.remove('error');
-      }
-    }
-
-    async function check() {
-      try {
-        const res = await fetch('/api/verify-pin', {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ pin: entered }),
-        });
-        const { ok } = await res.json();
-        if (ok) {
-          sessionStorage.setItem(SESSION_KEY, 'true');
-          unlock(true);
-        } else {
-          showError();
-        }
-      } catch (e) {
-        showError();
-      } finally {
-        if (!sessionStorage.getItem(SESSION_KEY)) {
-          for (let i = 0; i < 4; i++) {
-            const dot = document.getElementById('d' + i);
-            dot.classList.add('error');
-            dot.classList.remove('filled');
-          }
-          setTimeout(() => {
-            entered = '';
-            checking = false;
-            updateDots();
-          }, 600);
-        }
-      }
-    }
-
-    function unlock(animate) {
-      const pin = document.getElementById('pin-screen');
-      const dash = document.getElementById('dashboard');
-      if (animate) {
-        pin.style.transition = 'opacity 0.3s ease';
-        pin.style.opacity = '0';
-        setTimeout(() => {
-          pin.style.display = 'none';
-          dash.classList.add('visible');
-        }, 300);
-      } else {
-        pin.style.display = 'none';
-        dash.classList.add('visible');
-      }
-    }
-
-    function showError() {
-      document.getElementById('pin-error').classList.add('show');
-    }
-
-    function clearError() {
-      document.getElementById('pin-error').classList.remove('show');
-    }
-
-    document.addEventListener('keydown', (e) => {
-      if (document.getElementById('pin-screen').style.display === 'none') return;
-      if (e.key >= '0' && e.key <= '9') press(e.key);
-      if (e.key === 'Backspace') del();
-    });
-  </script>
+  <footer>made with ♥ by your husband</footer>
 
 </body>
 </html>
