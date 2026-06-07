@@ -1,0 +1,342 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Grove · Settings</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,400;0,9..144,600&family=Plus+Jakarta+Sans:wght@300;400;500&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet" />
+  <script>
+    try {
+      var t = localStorage.getItem('grove_theme') || 'auto';
+      if (t === 'dark')  document.documentElement.classList.add('theme-dark');
+      if (t === 'light') document.documentElement.classList.add('theme-light');
+    } catch (e) {}
+  </script>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    :root {
+      --bg:#10140E; --bg-paper:#171C13; --bg-elevated:#1E241A; --bg-sunken:#0B0F09;
+      --border:#2A3122; --text:#ECEFE6; --text-soft:#9BA690;
+      --accent:#4FA06F; --secondary:#9B82BE;
+      --ok:#5FB47E; --warn:#D8A24F; --danger:#D2685F;
+      --accent-weak: color-mix(in srgb, var(--accent) 14%, var(--bg-paper));
+      --font-display:'Fraunces', serif; --font-body:'Plus Jakarta Sans', sans-serif;
+      --font-mono:'JetBrains Mono', monospace;
+      --fs-xs:.64rem; --fs-sm:.8rem; --fs-base:1rem; --fs-lg:1.25rem; --fs-2xl:1.953rem;
+      --fw-title:600; --fw-med:500; --fw-body:400;
+      --r-sm:6px; --r-md:12px; --r-lg:16px; --r-full:999px;
+      --sp-1:4px; --sp-2:8px; --sp-3:12px; --sp-4:16px; --sp-5:24px; --sp-6:32px; --sp-8:48px;
+    }
+    @media (prefers-color-scheme: light) { :root:not(.theme-dark) {
+      --bg:#F3F5EE; --bg-paper:#FAFBF5; --bg-elevated:#FFFFFF; --bg-sunken:#E8ECE0;
+      --border:#D8DECF; --text:#1A1F15; --text-soft:#5C6651; --accent:#2F6B47; --secondary:#6E5891;
+    }}
+    :root.theme-light {
+      --bg:#F3F5EE; --bg-paper:#FAFBF5; --bg-elevated:#FFFFFF; --bg-sunken:#E8ECE0;
+      --border:#D8DECF; --text:#1A1F15; --text-soft:#5C6651; --accent:#2F6B47; --secondary:#6E5891;
+    }
+    :root.theme-dark {
+      --bg:#10140E; --bg-paper:#171C13; --bg-elevated:#1E241A; --bg-sunken:#0B0F09;
+      --border:#2A3122; --text:#ECEFE6; --text-soft:#9BA690; --accent:#4FA06F; --secondary:#9B82BE;
+    }
+    @media (prefers-reduced-motion: reduce) { *, *::before, *::after { transition-duration: 0ms !important; } }
+
+    body { font-family: var(--font-body); background: var(--bg); color: var(--text);
+      min-height: 100vh; -webkit-font-smoothing: antialiased; padding: var(--sp-5) var(--sp-4) var(--sp-8); }
+    .wrap { max-width: 560px; margin: 0 auto; }
+    .mono { font-family: var(--font-mono); }
+    button { font-family: inherit; cursor: pointer; }
+    input { font-family: inherit; font-size: 16px; }
+
+    .head { display:flex; align-items:center; gap: var(--sp-3); margin-bottom: var(--sp-5); }
+    .back { width:38px; height:38px; flex:none; border-radius: var(--r-full); border:0.5px solid var(--border);
+      background: var(--bg-paper); color: var(--text-soft); display:flex; align-items:center; justify-content:center;
+      text-decoration:none; font-size:20px; }
+    .back:hover { color: var(--accent); border-color: var(--accent); }
+    h1 { font-family: var(--font-display); font-size: var(--fs-2xl); font-weight: var(--fw-title); letter-spacing:-.02em; }
+    .sub { font-size: var(--fs-sm); color: var(--text-soft); }
+
+    .tabs { display:grid; grid-auto-columns:1fr; grid-auto-flow:column; gap: var(--sp-1);
+      background: var(--bg-sunken); padding: var(--sp-1); border-radius: var(--r-md); margin-bottom: var(--sp-5); }
+    .tab { display:flex; align-items:center; justify-content:center; gap: var(--sp-2); padding: var(--sp-2);
+      border:0; background:transparent; border-radius: var(--r-sm); color: var(--text-soft); font-size: var(--fs-sm); }
+    .tab.on { background: var(--bg-elevated); color: var(--accent); font-weight: var(--fw-med); }
+    .tab svg { width:15px; height:15px; fill:none; stroke:currentColor; stroke-width:1.8; stroke-linecap:round; stroke-linejoin:round; }
+
+    .card { background: var(--bg-paper); border:0.5px solid var(--border); border-radius: var(--r-lg);
+      padding: var(--sp-5); margin-bottom: var(--sp-4); }
+    .card h2 { font-family: var(--font-display); font-size: var(--fs-lg); font-weight: var(--fw-title); margin-bottom: var(--sp-1); }
+    .note { font-size: var(--fs-sm); color: var(--text-soft); margin-top: var(--sp-3); }
+
+    .segmented { display:grid; grid-template-columns:repeat(3,1fr); gap: var(--sp-2); margin-top: var(--sp-4); }
+    .segment { display:flex; flex-direction:column; align-items:center; gap: var(--sp-2); padding: var(--sp-4) var(--sp-2);
+      border:1px solid var(--border); background: var(--bg-sunken); border-radius: var(--r-md); color: var(--text-soft);
+      font-size: var(--fs-sm); transition: all 160ms cubic-bezier(.2,.8,.2,1); }
+    .segment.on { border-color: var(--accent); color: var(--text); background: var(--accent-weak); }
+    .segment svg { width:20px; height:20px; fill:none; stroke:currentColor; stroke-width:1.7; stroke-linecap:round; stroke-linejoin:round; }
+
+    .rows { display:flex; flex-direction:column; gap: var(--sp-3); margin-top: var(--sp-4); }
+    .row { display:flex; align-items:center; gap: var(--sp-3); padding: var(--sp-3) var(--sp-4);
+      background: var(--bg-sunken); border-radius: var(--r-md); }
+    .grow { flex:1; min-width:0; display:flex; flex-direction:column; gap:2px; }
+    .row .title { font-family: var(--font-display); font-size: var(--fs-base); }
+    .row .meta { font-size: var(--fs-sm); color: var(--text-soft); overflow:hidden; text-overflow:ellipsis; white-space:nowrap; }
+    .dot { width:12px; height:12px; border-radius: var(--r-full); flex:none; }
+    .swatch { position:relative; width:32px; height:32px; border-radius: var(--r-sm); border:1px solid var(--border); flex:none; overflow:hidden; }
+    .swatch input { position:absolute; inset:-4px; border:none; padding:0; background:none; cursor:pointer; }
+
+    .field { background: var(--bg-elevated); border:1px solid var(--border); border-radius: var(--r-sm);
+      padding:6px 8px; color: var(--text); width:100%; }
+    .field.title { font-family: var(--font-display); }
+    .field.mono { font-family: var(--font-mono); font-size: var(--fs-sm); }
+    .edit-grid { display:flex; flex-direction:column; gap: var(--sp-2); }
+    .accent-edit { display:flex; gap: var(--sp-2); align-items:center; }
+    .accent-edit input[type=color] { width:36px; height:34px; border:1px solid var(--border); border-radius: var(--r-sm); background:none; }
+
+    .tag { font-size: var(--fs-xs); color: var(--accent); background: var(--accent-weak); padding:2px 8px; border-radius: var(--r-full); }
+    .actions { display:flex; align-items:center; gap: var(--sp-2); }
+
+    .btn { display:inline-flex; align-items:center; justify-content:center; gap: var(--sp-2); font-size: var(--fs-sm);
+      padding: var(--sp-2) var(--sp-4); border-radius: var(--r-md); border:1px solid var(--border);
+      background: var(--bg-elevated); color: var(--text); }
+    .btn.ghost { background:transparent; }
+    .btn.danger { background: var(--danger); border-color: var(--danger); color:#fff; }
+    .btn.danger-text { color: var(--danger); border-color: transparent; background:transparent; }
+    .btn.sm { padding:6px 10px; font-size: var(--fs-xs); }
+    .btn.block { width:100%; margin-top: var(--sp-4); }
+    .btn.icon { padding:6px; }
+    .btn:disabled { opacity:.35; cursor:default; }
+    .btn svg { width:15px; height:15px; fill:none; stroke:currentColor; stroke-width:1.8; stroke-linecap:round; stroke-linejoin:round; }
+
+    .toggle { display:inline-flex; align-items:center; gap: var(--sp-2); padding:4px 10px 4px 4px; border:1px solid var(--border);
+      border-radius: var(--r-full); background: var(--bg-elevated); }
+    .toggle .knob { width:14px; height:14px; border-radius: var(--r-full); background: var(--text-soft); transition: all 160ms; }
+    .toggle.on { border-color: var(--accent); background: var(--accent-weak); }
+    .toggle.on .knob { background: var(--accent); }
+    .toggle .lbl { font-size: var(--fs-xs); color: var(--text-soft); }
+    .toggle.on .lbl { color: var(--accent); }
+
+    .row.off { opacity:.5; }
+    .link-row { text-decoration:none; color:inherit; }
+    .pill { font-size: var(--fs-xs); padding:2px 8px; border-radius: var(--r-full); font-family: var(--font-mono); }
+    .pill.up { color: var(--ok); background: color-mix(in srgb, var(--ok) 16%, transparent); }
+    .pill.down { color: var(--danger); background: color-mix(in srgb, var(--danger) 16%, transparent); }
+    .ext { color: var(--text-soft); font-size:15px; }
+    .hidden { display:none !important; }
+    .empty { text-align:center; padding: var(--sp-6); color: var(--text-soft); font-size: var(--fs-sm); }
+  </style>
+</head>
+<body>
+  <div class="wrap">
+    <div class="head">
+      <a class="back" href="/" aria-label="Back to Grove">‹</a>
+      <div>
+        <h1>Settings</h1>
+        <p class="sub" id="whoami">Grove household</p>
+      </div>
+    </div>
+
+    <nav class="tabs" id="tabs">
+      <button class="tab on" data-s="appearance"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="5"/><line x1="12" y1="1" x2="12" y2="3"/><line x1="12" y1="21" x2="12" y2="23"/><line x1="4.2" y1="4.2" x2="5.6" y2="5.6"/><line x1="18.4" y1="18.4" x2="19.8" y2="19.8"/></svg><span>Appearance</span></button>
+      <button class="tab" data-s="household"><svg viewBox="0 0 24 24"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/></svg><span>Household</span></button>
+      <button class="tab" data-s="apps"><svg viewBox="0 0 24 24"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/></svg><span>Apps</span></button>
+      <button class="tab" data-s="about"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><line x1="12" y1="16" x2="12" y2="12"/><line x1="12" y1="8" x2="12.01" y2="8"/></svg><span>About</span></button>
+    </nav>
+
+    <section id="sec-appearance">
+      <div class="card">
+        <h2>Theme</h2>
+        <p class="sub">Applies across every Grove app and follows you between devices.</p>
+        <div class="segmented" id="themeSeg">
+          <button class="segment" data-t="auto"><svg viewBox="0 0 24 24"><rect x="2" y="3" width="20" height="14" rx="2"/><line x1="8" y1="21" x2="16" y2="21"/><line x1="12" y1="17" x2="12" y2="21"/></svg><span>Auto</span></button>
+          <button class="segment" data-t="light"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="5"/><line x1="12" y1="1" x2="12" y2="3"/><line x1="12" y1="21" x2="12" y2="23"/><line x1="4.2" y1="4.2" x2="5.6" y2="5.6"/></svg><span>Light</span></button>
+          <button class="segment" data-t="dark"><svg viewBox="0 0 24 24"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg><span>Dark</span></button>
+        </div>
+      </div>
+    </section>
+
+    <section id="sec-household" class="hidden">
+      <div class="card">
+        <h2>Members</h2>
+        <p class="sub">Shared across every app — colors tag transactions, entries, and more.</p>
+        <div class="rows" id="people"></div>
+        <button class="btn ghost block" id="addPerson"><svg viewBox="0 0 24 24"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg> Add member</button>
+        <p class="note">The email must match the address allowed in the Cloudflare Access “Household” policy, or that person won’t be recognized.</p>
+      </div>
+    </section>
+
+    <section id="sec-apps" class="hidden">
+      <div class="card">
+        <h2>App tiles</h2>
+        <p class="sub">Reorder, rename, or hide a tile on the home grid.</p>
+        <div class="rows" id="apps"></div>
+      </div>
+    </section>
+
+    <section id="sec-about" class="hidden">
+      <div class="card">
+        <h2>About Grove</h2>
+        <p class="sub">Version <span class="mono">1.0.0</span> · the reilly.live home suite.</p>
+        <div class="rows" id="aboutApps"></div>
+        <button class="btn ghost block" id="checkReach">Check reachability</button>
+        <p class="note">A reachability check only confirms the host answered — Cloudflare Access still gates each app behind your household login.</p>
+      </div>
+    </section>
+  </div>
+
+  <script type="module">
+    import {
+      whoami, loadTheme, setTheme, cachedTheme,
+      getPeople, updatePerson, addPerson, removePerson,
+      getApps, updateApp, saveAppOrder,
+    } from '/grove-core.js';
+
+    const $ = (s, r = document) => r.querySelector(s);
+    let me = null, people = [], apps = [];
+
+    // ---- tab switching ----
+    const SECTIONS = ['appearance', 'household', 'apps', 'about'];
+    $('#tabs').addEventListener('click', (e) => {
+      const b = e.target.closest('.tab'); if (!b) return;
+      const s = b.dataset.s;
+      document.querySelectorAll('.tab').forEach((t) => t.classList.toggle('on', t === b));
+      SECTIONS.forEach((id) => $('#sec-' + id).classList.toggle('hidden', id !== s));
+    });
+
+    // ---- appearance ----
+    function paintTheme(t) {
+      document.querySelectorAll('#themeSeg .segment').forEach((s) =>
+        s.classList.toggle('on', s.dataset.t === t));
+    }
+    $('#themeSeg').addEventListener('click', (e) => {
+      const b = e.target.closest('.segment'); if (!b) return;
+      paintTheme(b.dataset.t);
+      setTheme(me?.id, b.dataset.t);
+    });
+
+    // ---- household ----
+    function renderPeople() {
+      const box = $('#people');
+      if (!people.length) { box.innerHTML = '<div class="empty">No members yet.</div>'; return; }
+      box.replaceChildren(...people.map((p) => {
+        const row = document.createElement('div'); row.className = 'row';
+        const sw = document.createElement('label'); sw.className = 'swatch';
+        const color = document.createElement('input'); color.type = 'color'; color.value = p.color || '#9B82BE';
+        color.onchange = () => { p.color = color.value; updatePerson(p.id, { color: color.value }); };
+        sw.append(color);
+        const grow = document.createElement('div'); grow.className = 'grow';
+        const name = document.createElement('input'); name.className = 'field title'; name.value = p.name || '';
+        name.onchange = () => { const v = name.value.trim() || 'Member'; name.value = v; p.name = v; updatePerson(p.id, { name: v }); };
+        const email = document.createElement('span'); email.className = 'meta mono'; email.textContent = p.email || 'no Cloudflare email set';
+        grow.append(name, email);
+        row.append(sw, grow);
+        if (me?.id === p.id) { const tag = document.createElement('span'); tag.className = 'tag'; tag.textContent = 'you'; row.append(tag); }
+        const del = document.createElement('button'); del.className = 'btn danger-text icon'; del.title = 'Remove ' + (p.name || 'member');
+        del.innerHTML = '<svg viewBox="0 0 24 24"><polyline points="3 6 5 6 21 6"/><path d="M19 6l-1 14a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2L5 6"/><path d="M10 11v6M14 11v6"/></svg>';
+        del.onclick = () => {
+          if (del.dataset.confirm) { removePerson(p.id); people = people.filter((x) => x.id !== p.id); renderPeople(); return; }
+          del.dataset.confirm = '1'; del.className = 'btn danger sm'; del.innerHTML = 'Remove ' + (p.name || '');
+          setTimeout(() => { if (del.isConnected) { delete del.dataset.confirm; del.className = 'btn danger-text icon'; del.innerHTML = '<svg viewBox="0 0 24 24"><polyline points="3 6 5 6 21 6"/><path d="M19 6l-1 14a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2L5 6"/><path d="M10 11v6M14 11v6"/></svg>'; } }, 3000);
+        };
+        row.append(del);
+        return row;
+      }));
+    }
+    $('#addPerson').onclick = async () => {
+      const p = await addPerson(people.length);
+      if (p) { people.push(p); renderPeople(); }
+    };
+
+    // ---- apps ----
+    function renderApps() {
+      const box = $('#apps');
+      if (!apps.length) { box.innerHTML = '<div class="empty">No apps in the registry yet.</div>'; return; }
+      box.replaceChildren(...apps.map((a, i) => {
+        const row = document.createElement('div'); row.className = 'row' + (a.enabled ? '' : ' off');
+        const dot = document.createElement('span'); dot.className = 'dot'; dot.style.background = a.accent_hex || 'var(--accent)';
+        const grow = document.createElement('div'); grow.className = 'grow';
+        const title = document.createElement('span'); title.className = 'title'; title.textContent = a.name;
+        const sub = document.createElement('span'); sub.className = 'meta mono'; sub.textContent = a.subdomain;
+        grow.append(title, sub);
+
+        const actions = document.createElement('div'); actions.className = 'actions';
+        const up = mkBtn('<svg viewBox="0 0 24 24"><polyline points="18 15 12 9 6 15"/></svg>', () => move(i, -1)); up.disabled = i === 0;
+        const down = mkBtn('<svg viewBox="0 0 24 24"><polyline points="6 9 12 15 18 9"/></svg>', () => move(i, 1)); down.disabled = i === apps.length - 1;
+        const tog = document.createElement('button'); tog.className = 'toggle' + (a.enabled ? ' on' : '');
+        tog.innerHTML = '<span class="knob"></span><span class="lbl">' + (a.enabled ? 'Shown' : 'Hidden') + '</span>';
+        tog.onclick = () => { a.enabled = !a.enabled; updateApp(a.id, { enabled: a.enabled }); renderApps(); };
+        const edit = document.createElement('button'); edit.className = 'btn ghost sm'; edit.textContent = 'Edit';
+        edit.onclick = () => toggleEdit(row, a);
+        actions.append(up, down, tog, edit);
+        row.append(dot, grow, actions);
+        return row;
+      }));
+    }
+    function mkBtn(html, onclick) { const b = document.createElement('button'); b.className = 'btn ghost sm icon'; b.innerHTML = html; b.onclick = onclick; return b; }
+    function move(i, dir) {
+      const j = i + dir; if (j < 0 || j >= apps.length) return;
+      [apps[i], apps[j]] = [apps[j], apps[i]];
+      renderApps();
+      saveAppOrder(apps.map((a) => a.id));
+    }
+    function toggleEdit(row, a) {
+      const grow = row.querySelector('.grow');
+      if (grow.dataset.editing) { grow.dataset.editing = ''; renderApps(); return; }
+      grow.dataset.editing = '1';
+      const wrap = document.createElement('div'); wrap.className = 'edit-grid';
+      const name = document.createElement('input'); name.className = 'field title'; name.value = a.name; name.placeholder = 'Name';
+      name.onchange = () => { a.name = name.value; updateApp(a.id, { name: a.name }); };
+      const sub = document.createElement('input'); sub.className = 'field mono'; sub.value = a.subdomain; sub.placeholder = 'sub.reilly.live';
+      sub.onchange = () => { a.subdomain = sub.value; updateApp(a.id, { subdomain: a.subdomain }); };
+      const ac = document.createElement('div'); ac.className = 'accent-edit';
+      const col = document.createElement('input'); col.type = 'color'; col.value = a.accent_hex || '#4FA06F';
+      col.onchange = () => { a.accent_hex = col.value; updateApp(a.id, { accent_hex: a.accent_hex }); row.querySelector('.dot').style.background = a.accent_hex; };
+      const acname = document.createElement('input'); acname.className = 'field'; acname.value = a.accent_name || ''; acname.placeholder = 'Accent name';
+      acname.onchange = () => { a.accent_name = acname.value; updateApp(a.id, { accent_name: a.accent_name }); };
+      ac.append(col, acname);
+      wrap.append(name, sub, ac);
+      grow.replaceChildren(wrap);
+      row.querySelector('.btn.ghost.sm:last-child').textContent = 'Done';
+    }
+
+    // ---- about ----
+    function renderAbout() {
+      const box = $('#aboutApps');
+      box.replaceChildren(...apps.map((a) => {
+        const row = document.createElement('a'); row.className = 'row link-row'; row.href = 'https://' + a.subdomain; row.target = '_blank'; row.rel = 'noreferrer';
+        const dot = document.createElement('span'); dot.className = 'dot'; dot.style.background = a.accent_hex || 'var(--accent)';
+        const grow = document.createElement('div'); grow.className = 'grow';
+        const t = document.createElement('span'); t.className = 'title'; t.textContent = a.name;
+        const s = document.createElement('span'); s.className = 'meta mono'; s.textContent = a.subdomain;
+        grow.append(t, s);
+        const pill = document.createElement('span'); pill.className = 'pill'; pill.dataset.sub = a.subdomain; pill.style.display = 'none';
+        const ext = document.createElement('span'); ext.className = 'ext'; ext.textContent = '↗';
+        row.append(dot, grow, pill, ext);
+        return row;
+      }));
+    }
+    $('#checkReach').onclick = async () => {
+      const pills = document.querySelectorAll('#aboutApps .pill');
+      await Promise.all([...pills].map(async (pill) => {
+        pill.style.display = ''; pill.className = 'pill'; pill.textContent = '…';
+        try { await fetch('https://' + pill.dataset.sub, { mode: 'no-cors' }); pill.classList.add('up'); pill.textContent = 'reachable'; }
+        catch { pill.classList.add('down'); pill.textContent = 'no answer'; }
+      }));
+    };
+
+    // ---- init ----
+    (async () => {
+      paintTheme(cachedTheme());
+      const who = await whoami();
+      me = who.person; people = who.people || [];
+      $('#whoami').textContent = me ? 'Signed in as ' + me.name : 'Grove household';
+      loadTheme(me?.id).then(paintTheme);
+      renderPeople();
+      apps = await getApps(); // all, including hidden
+      renderApps(); renderAbout();
+    })();
+  </script>
+</body>
+</html>
