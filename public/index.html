@@ -6,7 +6,7 @@
   <title>Grove</title>
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,400;0,9..144,600;1,9..144,400&family=Plus+Jakarta+Sans:wght@300;400;500&display=swap" rel="stylesheet" />
+  <link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,400;0,9..144,600;1,9..144,400&family=JetBrains+Mono:wght@400;500&family=Plus+Jakarta+Sans:wght@300;400;500&display=swap" rel="stylesheet" />
   <!-- Flash-free theme: apply the cached choice synchronously, before paint. -->
   <script>
     try {
@@ -32,6 +32,7 @@
 
       --font-display: 'Fraunces', serif;
       --font-body:    'Plus Jakarta Sans', sans-serif;
+      --font-mono:    'JetBrains Mono', monospace;
 
       --fs-xs:  0.64rem;
       --fs-sm:  0.8rem;
@@ -154,6 +155,76 @@
       width: 19px; height: 19px;
       fill: none; stroke: currentColor; stroke-width: 1.7;
       stroke-linecap: round; stroke-linejoin: round;
+    }
+
+    /* ── TODAY GLANCE ── */
+    .today {
+      width: 100%;
+      max-width: 380px;
+      margin-bottom: var(--sp-5);
+    }
+    .today-label {
+      font-size: var(--fs-xs);
+      color: var(--text-soft);
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      font-weight: var(--fw-body);
+      margin-bottom: var(--sp-3);
+      padding-left: var(--sp-1);
+    }
+    .glance {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+      gap: var(--sp-2);
+    }
+    .glance-card {
+      position: relative;
+      overflow: hidden;
+      background: var(--bg-paper);
+      border: 0.5px solid var(--border);
+      border-radius: var(--r-md);
+      padding: var(--sp-3) var(--sp-4);
+      display: flex;
+      flex-direction: column;
+      gap: 2px;
+      text-decoration: none;
+      color: inherit;
+      transition: border-color 160ms cubic-bezier(.2,.8,.2,1),
+                  transform    160ms cubic-bezier(.2,.8,.2,1);
+      -webkit-tap-highlight-color: transparent;
+    }
+    .glance-card::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: radial-gradient(ellipse at 100% 0%, color-mix(in srgb, var(--gc, var(--accent)) 16%, transparent) 0%, transparent 70%);
+      pointer-events: none;
+    }
+    .glance-card:hover  { border-color: color-mix(in srgb, var(--gc, var(--accent)) 55%, transparent); transform: translateY(-2px); }
+    .glance-card:active { transform: scale(0.97); }
+    .gc-label {
+      position: relative; z-index: 1;
+      font-size: var(--fs-xs);
+      color: var(--text-soft);
+      letter-spacing: 0.07em;
+      text-transform: uppercase;
+      font-weight: var(--fw-med);
+    }
+    .gc-value {
+      position: relative; z-index: 1;
+      font-family: var(--font-mono);
+      font-size: var(--fs-lg);
+      font-weight: var(--fw-med);
+      color: var(--text);
+      line-height: 1.1;
+      margin-top: 2px;
+    }
+    .gc-sub {
+      position: relative; z-index: 1;
+      font-size: var(--fs-xs);
+      color: var(--text-soft);
+      font-weight: var(--fw-body);
+      line-height: 1.3;
     }
 
     /* ── GRID ── */
@@ -370,6 +441,13 @@
 
   <main class="section">
 
+    <!-- TODAY AT A GLANCE — populated by today.js from each app's schema.
+         Stays hidden until at least one card has data. -->
+    <section class="today" id="today" hidden>
+      <p class="today-label">Today</p>
+      <div class="glance" id="glance"></div>
+    </section>
+
     <!-- Tiles render here from APP_META, then the registry (core.apps)
          overlays hide / reorder / rename. See the module script below. -->
     <div class="app-grid" id="appGrid"></div>
@@ -399,6 +477,7 @@
 
   <script type="module">
     import { whoami, loadTheme, getApps } from '/grove-core.js';
+    import { renderToday } from '/today.js';
 
     // Bespoke per-tile icon + dark backdrop, keyed by the registry slug.
     // The registry (core.apps) controls show/hide, order, name, subdomain,
@@ -440,6 +519,7 @@
       try {
         const who = await whoami();
         loadTheme(who.person?.id);
+        renderToday();   // fill the "Today" strip from each app's schema
         const apps = await getApps({ onlyEnabled: true });
         if (apps.length) {
           render(apps.map((a) => {

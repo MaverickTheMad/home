@@ -13,10 +13,32 @@ import { createClient } from 'https://esm.sh/@supabase/supabase-js@2'
 const SUPABASE_URL = 'https://ceomcgjbizynplactgiq.supabase.co'
 const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImNlb21jZ2piaXp5bnBsYWN0Z2lxIiwicm9sZSI6ImFub24iLCJpYXQiOjE3Nzk0NzE5MTcsImV4cCI6MjA5NTA0NzkxN30.ythvg4w8UKPM5AvWDAGM1UA5_JBmNSfrk3f62MVbvrA'
 
-export const core =
+const _haveCreds =
   SUPABASE_URL && SUPABASE_ANON_KEY && !SUPABASE_ANON_KEY.startsWith('REPLACE')
-    ? createClient(SUPABASE_URL, SUPABASE_ANON_KEY, { db: { schema: 'core' } })
-    : null
+
+export const core = _haveCreds
+  ? createClient(SUPABASE_URL, SUPABASE_ANON_KEY, { db: { schema: 'core' } })
+  : null
+
+// ---------------------------------------------------------------------
+// schemaClient — a READ-ONLY client pinned to another app's schema, so the
+// dashboard can surface one app's data without copying it (the same
+// cross-schema-read pattern the apps use). db.schema is fixed per client,
+// so each foreign schema needs its own. persistSession off + a distinct
+// storageKey avoids the "multiple GoTrueClient" console warning. Clients
+// are memoized per schema.
+// ---------------------------------------------------------------------
+const _schemaClients = {}
+export function schemaClient(schema) {
+  if (!_haveCreds) return null
+  if (!_schemaClients[schema]) {
+    _schemaClients[schema] = createClient(SUPABASE_URL, SUPABASE_ANON_KEY, {
+      db: { schema },
+      auth: { persistSession: false, autoRefreshToken: false, storageKey: `grove-ro-${schema}` },
+    })
+  }
+  return _schemaClients[schema]
+}
 
 // ---------------------------------------------------------------------
 // THEME — shared across the suite via core.prefs; localStorage is only a
