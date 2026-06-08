@@ -32,6 +32,25 @@ function localDayBounds(dateStr) {
 }
 const cap = (s) => (s ? s[0].toUpperCase() + s.slice(1) : s)
 
+function addDaysStr(dateStr, n) {
+  const d = new Date(dateStr + 'T00:00:00'); d.setDate(d.getDate() + n)
+  return `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, '0')}-${String(d.getDate()).padStart(2, '0')}`
+}
+// Human relative date for a YYYY-MM-DD: Today / Tomorrow / weekday (this wk) / Mon D
+function relDate(dateStr) {
+  const d = new Date(dateStr + 'T00:00:00')
+  const now = new Date(); now.setHours(0, 0, 0, 0)
+  const diff = Math.round((d - now) / 86400000)
+  if (diff <= 0) return 'Today'
+  if (diff === 1) return 'Tomorrow'
+  if (diff < 7) return d.toLocaleDateString([], { weekday: 'long' })
+  return d.toLocaleDateString([], { month: 'short', day: 'numeric' })
+}
+function fmtMoney(n) {
+  if (n == null) return ''
+  return '$' + Number(n).toLocaleString('en-US', { maximumFractionDigits: 0 })
+}
+
 // Fitness category id → label (mirror of the Fitness app; separate repo).
 const FITNESS_CATEGORY_LABEL = {
   general: 'General', cardio: 'Cardio', pilates_yoga: 'Pilates / Yoga',
@@ -136,17 +155,85 @@ const SOURCES = [
     }
   },
 
-  // =================================================================
-  // NOT YET WIRED — schema/columns unverified for these apps. Each is a
-  // one-function add once the schema name + shape are confirmed; until
-  // then they're left out of SOURCES so the dashboard never ships a
-  // query that errors in the console.
-  //
-  //   • ledger   "bills due this week / unpaid"  (schema?: 'budget'; bills + bill_payments)
-  //   • pantry   "tonight's dinner"              (schema?: 'pantry'; shopping_state.meal_plan + recipes)
-  //   • calendar "next event today"              (schema + tables unknown)
-  //   • pets     "next feeding / meds due"       (schema + tables unknown)
-  // =================================================================
+  // ---- MEALS: tonight's planned dinner (shared) ----
+  // shopping.shopping_state.meal_plan is keyed by day-offset from this week's
+  // Sunday (startOfWeek = today - today.getDay()), so today's key = getDay().
+  async function meals() {
+    const db = schemaClient('shopping')
+    if (!db) return null
+    const { data: st } = await db.from('shopping_state').select('meal_plan').eq('id', 'current').maybeSingle()
+    const plan = st?.meal_plan || {}
+    const offset = new Date().getDay()
+    const recipeId = plan[String(offset)] || plan[offset]
+    if (!recipeId) return null
+    const { data: r } = await db.from('recipes').select('name').eq('id', recipeId).maybeSingle()
+    if (!r?.name) return null
+    return { label: 'Tonight', value: r.name, sub: 'Planned dinner', accent: '#CB7A4F', href: 'https://shopping.reilly.live', text: true }
+  },
+
+  // ---- BILLS: next unpaid bill due (shared) ----
+  // Reached through the Almanac's budget views: v_bills (real payment rows,
+  // meta.paid) + v_bills_projected (future months not yet opened, all unpaid).
+  async function bills() {
+    const db = schemaClient('almanac')
+    if (!db) return null
+    const today = todayStr()
+    const [{ data: real }, { data: proj }] = await Promise.all([
+      db.from('v_bills').select('title, event_date, amount, meta').gte('event_date', today).order('event_date').limit(30),
+      db.from('v_bills_projected').select('title, event_date, amount').gte('event_date', today).order('event_date').limit(30),
+    ])
+    const unpaid = [
+      ...(real || []).filter(b => b.meta?.paid !== true),  // paid false / missing
+      ...(proj || []),
+    ]
+    // dedupe by title|date, then sort soonest-first
+    const seen = new Set(), list = []
+    for (const b of unpaid.sort((a, c) => a.event_date < c.event_date ? -1 : 1)) {
+      const k = `${b.title}|${b.event_date}`
+      if (!seen.has(k)) { seen.add(k); list.push(b) }
+    }
+    if (!list.length) return null
+    const next = list[0]
+    const weekOut = addDaysStr(today, 7)
+    const dueThisWeek = list.filter(b => b.event_date <= weekOut).length
+    return {
+      label: 'Bills',
+      value: fmtMoney(next.amount),
+      sub: `${next.title} · ${relDate(next.event_date)}${dueThisWeek > 1 ? ` · +${dueThisWeek - 1} more this week` : ''}`,
+      accent: '#6F86C2',
+      href: 'https://budget.reilly.live',
+    }
+  },
+
+  // ---- CALENDAR: next thing on the shared calendar (shared) ----
+  // Almanac's unified timeline (family events, paydays, goal targets…), minus
+  // pet items, which get their own card below.
+  async function calendar() {
+    const db = schemaClient('almanac')
+    if (!db) return null
+    const { data } = await db.from('v_timeline')
+      .select('title, event_date, event_time, source')
+      .neq('source', 'pet').gte('event_date', todayStr())
+      .order('event_date').limit(1)
+    const e = data?.[0]
+    if (!e) return null
+    let sub = relDate(e.event_date)
+    if (e.event_time) sub += ' · ' + new Date(e.event_time).toLocaleTimeString([], { hour: 'numeric', minute: '2-digit' })
+    return { label: 'Calendar', value: e.title, sub, accent: '#79B45F', href: 'https://almanac.reilly.live', text: true }
+  },
+
+  // ---- PETS: next reminder / vaccine / med refill (shared) ----
+  async function pets() {
+    const db = schemaClient('almanac')
+    if (!db) return null
+    const { data } = await db.from('v_timeline')
+      .select('title, event_date')
+      .eq('source', 'pet').gte('event_date', todayStr())
+      .order('event_date').limit(1)
+    const p = data?.[0]
+    if (!p) return null
+    return { label: 'Pets', value: p.title, sub: relDate(p.event_date), accent: '#D8A24F', href: 'https://pets.reilly.live', text: true }
+  },
 ]
 
 // =====================================================================
@@ -160,7 +247,7 @@ function cardEl(card) {
   if (card.accent) a.style.setProperty('--gc', card.accent)
   a.innerHTML =
     `<span class="gc-label">${card.label}</span>` +
-    `<span class="gc-value">${card.value}</span>` +
+    `<span class="gc-value${card.text ? ' is-text' : ''}">${card.value}</span>` +
     `<span class="gc-sub">${card.sub || ''}</span>`
   return a
 }
