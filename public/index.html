@@ -487,7 +487,6 @@
 
   <script type="module">
     import { whoami, loadTheme, getApps } from '/grove-core.js';
-    import { renderToday } from '/today.js';
 
     // Bespoke per-tile icon + dark backdrop, keyed by the registry slug.
     // The registry (core.apps) controls show/hide, order, name, subdomain,
@@ -529,7 +528,9 @@
       try {
         const who = await whoami();
         loadTheme(who.person?.id);
-        renderToday();   // fill the "Today" strip from each app's schema
+        // Optional enhancement — load lazily so a missing/broken today.js can
+        // NEVER take down the launcher grid. Failure here is swallowed.
+        import('/today.js').then(m => m.renderToday()).catch(() => {});
         const apps = await getApps({ onlyEnabled: true });
         if (apps.length) {
           render(apps.map((a) => {
